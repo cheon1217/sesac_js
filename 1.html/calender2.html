@@ -2,12 +2,49 @@
 <html>
     <head>
         <title>Photo Calender</title>
-        <link rel="stylesheet" href="calendar.css">
+
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                padding: 20px;
+            }
+
+            h1, h2 {
+                text-align: center;
+            }
+
+            #calendar {
+                width: 100%;
+                border: 2px solid;
+                height: 200px;
+            }
+
+            #calendar th {
+                width: 14%;
+                background-color: #dbdbdb;
+            }
+
+            #calendar td {
+                padding: 10px;
+                text-align: center;
+                border: 1px dashed #cccccc;
+            }
+
+            #calendar td:first-child, 
+            #calendar th:first-child {
+                color: #ff0000;
+            }
+
+            #calendar td:last-child, 
+            #calendar th:last-child {
+                color: #0000ff;
+            }
+        </style>
     </head>
     <body>
         <h1>Photo Calendar</h1>
         <h2>2024년 10월</h2>
-        <img src="scene.jpg" width="100%" height="400"/>
+        <img src="images/scene.jpg" width="100%" height="400"/>
         <table id="calendar">
             <thead>
                 <tr>
