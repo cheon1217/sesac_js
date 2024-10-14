@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        .mystyle1 {
+            list-style-type: disc; /* circle / square / disc 등등 */
+            background-color: aquamarine;
+            /* margin: 20px; */
+            /* padding: 60px; */
+        }
+
+        .mystyle2 {
+            list-style-type: upper-alpha;
+            background-color: bisque;
+            margin: 40px;
+            padding: 20px;
+        }
+
+        .mystyle2 > li { /* 다이렉트 차일드 */
+            margin-bottom: 10px;
+        }
+
+        .mystyle3 {
+            list-style: none;
+            background-color: rgb(245, 172, 255);
+        }
+
+        .mystyle3 li::before {
+            content: "✓";
+            color: rgb(0, 255, 0);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>CSS 적용할 수 있는 리스트 속성</h1>
+    <h2>UL (unordered list)</h2>
+    <ul class="mystyle1">
+        <li>항목1</li>
+        <li>항목2</li>
+        <li>항목3</li>
+    </ul>
+    <h2>OL (ordered list)</h2>
+    <ol class="mystyle2">
+        <li>항목1</li>
+        <li>항목2</li>
+        <li>항목3</li>
+    </ol>
+    <h2>OL (styled list)</h2>
+    <ol class="mystyle3">
+        <li>항목1</li>
+        <li>항목2</li>
+        <li>항목3</li>
+    </ol>
+</body>
+</html>
