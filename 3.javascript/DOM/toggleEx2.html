@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        p {
+            color: red;
+        }
+    </style>
+    <script>
+        function toggleTextColor() {
+            const textElement = document.getElementById("mytext");
+            const currentColor = textElement.style.color;
+
+            if (currentColor == "red") {
+                textElement.style.color = "blue";
+            } else {
+                textElement.style.color = "red";
+            }
+        }
+    </script>
+</head>
+<body>
+        <p id="mytext">이 텍스트의 색상을 토글해보세요!</p>
+        <button onclick="toggleTextColor()">텍스트 색상 토글</button>
+</body>
+</html>
