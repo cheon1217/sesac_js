@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script>
+        function toggleColor() {
+            const mytext = document.getElementById("mytext");
+            if (mytext.style.color == "black") {
+                mytext.style.color = "red";
+            } else if (mytext.style.color == "red") {
+                mytext.style.color = "blue";
+            } else {
+                mytext.style.color = "black";
+            }
+        }
+    </script>
+</head>
+<body>
+    <p id="mytext" style="color: black;">이 텍스트의 글자를 변경해보시오</p>
+    <button onclick="toggleColor()">텍스트 글자색 토글하기</button>
+</body>
+</html>
