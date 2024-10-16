@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script>
+
+        function number_inc() {
+            const result = document.getElementById("num");
+            result.textContent = Number(result.textContent) + 1;
+        }
+
+        function number_dec() {
+            const result = document.getElementById("num");
+            result.textContent = Number(result.textContent) - 1;
+        }
+    </script>
+</head>
+<body>
+    <h1>버튼 월든</h1>
+    <div id="num">0</div>
+    <div>
+        <button onclick="number_inc()">+1</button>
+        <button onclick="number_dec()">-1</button>
+    </div>
+</body>
+</html>
