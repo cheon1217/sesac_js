@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        #dragItem {
+            width: 100px;
+            height: 100px;
+            background-color: #ffcc00;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        #dropZone {
+            width: 200px;
+            height: 200px;
+            margin-top: 50px;
+            border: 2px dashed #ccc;
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div id="dragItem" draggable="true">Drag me</div>
+    <div id="dropZone">Drop here</div>
+
+    <script>
+        const dragItem = document.getElementById("dragItem");
+        const dropZone = document.getElementById("dropZone");
+
+        dragItem.addEventListener("dragstart", (e) => {
+            // e.preventDefault();
+            console.log("드래그 시작중.." + event.target.id);
+            event.dataTransfer.setData("target", event.target.id);
+            // 이벤트 객체(object) 안의 datatransfer 라는 객체 안에 내가 원하는 key,value로 저장 가능, 그래서 {"target",id}이런 형태로 데이터를 저장중
+        });
+
+        dropZone.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            console.log("이 개체 위에 무언가 올라옴");
+        });
+
+        dropZone.addEventListener("drop", (e) => {
+            e.preventDefault();
+            const data = event.dataTransfer.getData("target");
+            console.log("드롭 발생", data);
+            // DOM 트리 구조상, 멀티 parent를 가질 수 없으, 그래서 appendChild하면 이전에서 떨어짐
+            const draggedElement = document.getElementById(data);
+            dropZone.appendChild(draggedElement);
+        });
+    </script>
+</body>
+</html>
