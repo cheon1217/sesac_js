@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id="myInput" placeholder="글자를 입력하시오">
+
+    <script>
+        document.getElementById("myInput").addEventListener("focus", () => {
+            console.log("입력창이 포커스(선택) 되었음");
+        });
+
+        document.getElementById("myInput").addEventListener("blur", () => {
+            console.log("입력창이 포커스를 뿌옇게 했드아.. 포커스 잃음.");
+        });
+
+        document.getElementById("myInput").addEventListener("change", () => {
+            console.log("내용이 변경됨.");
+        });
+    </script>
+</body>
+</html>

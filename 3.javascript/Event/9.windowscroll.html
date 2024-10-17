@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        #content {
+            height: 2000px;
+            background: linear-gradient(to bottom, #ffcc00  0%, #ff6600 100%);
+        }
+    </style>
+</head>
+<body>
+    <div id="content"></div>
+    <script>
+        window.addEventListener("scroll", function() {
+            console.log("페이지 스크롤됨");
+
+            const scrollPosition = window.pageYOffset;
+            console.log(`현재 위치: ${scrollPosition}`)
+
+            const scrollPosition2 = document.documentElement.scrollTop;
+            console.log(`현재 위치2: ${scrollPosition2}`);
+
+            const scrollPosition3 = window.pageYOffset || document.documentElement.scrollTop;
+            console.log(`현재 위치3: ${scrollPosition3}`);
+        })
+
+        document.addEventListener("wheel", (event) => {
+            console.log(`마우스 휠 움직임: ${event.deltaY}`);
+        });
+    </script>
+</body>
+</html>

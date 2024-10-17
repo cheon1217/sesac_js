@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        #myElement {
+            width: 100px;
+            height: 100px;
+            background-color: lightblue;
+        }
+    </style>
+</head>
+<body>
+    <div id="myElement">Hover Over</div>
+
+    <script>
+        document.getElementById("myElement").addEventListener("mouseover", () => {
+            console.log("마우스 올라감");
+        });
+
+        document.getElementById("myElement").addEventListener("mouseout", () => {
+            console.log("마우스 나감");
+        });
+
+        document.getElementById("myElement").addEventListener("mousedown", (event) => {
+            console.log("마우스 down");
+            switch(event.button) {
+                case 0: 
+                    console.log("Left button clicked");
+                    break;
+                case 1: 
+                    console.log("middle button clicked");
+                    break;
+                case 2: 
+                    console.log("right button clicked");
+                    break;
+                default:
+                    console.log("Unknown button clicked");
+            }
+        });
+
+        document.getElementById("myElement").addEventListener("mouseup", () => {
+            console.log("마우스 up");
+        });
+    </script>
+</body>
+</html>

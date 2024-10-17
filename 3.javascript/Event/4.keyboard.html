@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        #displaykey {
+            font-size: 100px;
+            text-align: center;
+            margin-top: 50px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="myInput" placeholder="글자를 입력하시오.">
+    <div id="displaykey"><!-- 눌린 키를 표시 --></div>
+    <script>
+        document.addEventListener("keydown", (e) => {
+            document.getElementById("displaykey").textContent = e.key; // 눌린 키를 화면에 표시
+        });
+    </script>
+</body>
+</html>

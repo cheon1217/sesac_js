@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // window.onload = 함수();
+        // window.onload = () => {};
+
+        window.onload = function() {
+            console.log("모든 리소스(HTML/CSS/Image등)가 다 로딩됨. #1");
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("모든 리소스(HTML/CSS/Image등)가 다 로딩됨. #2");
+        });
+    </script>
+</body>
+</html>
