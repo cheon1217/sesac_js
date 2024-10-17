@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        #dragItem1 {
+            width: 100px;
+            height: 100px;
+            background-color: #ffcc00;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        #dragItem2 {
+            width: 100px;
+            height: 100px;
+            background-color: #00ffcc;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        #dragItem3 {
+            width: 100px;
+            height: 100px;
+            background-color: #8800ff;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        #dropZone {
+            display: flex;
+            width: 400px;
+            height: 200px;
+            margin-top: 50px;
+            border: 2px dashed #ccc;
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div id="dragItem1" draggable="true">Drag me1</div>
+    <div id="dragItem2" draggable="true">Drag me2</div>
+    <div id="dragItem3" draggable="true">Drag me3</div>
+    <div id="dropZone">Drop here</div>
+
+    <script>
+        const dragItem1 = document.getElementById("dragItem1");
+        const dragItem2 = document.getElementById("dragItem2");
+        const dragItem3 = document.getElementById("dragItem3");
+        const dropZone = document.getElementById("dropZone");
+
+        dragItem1.addEventListener("dragstart", (e) => {
+            console.log("드래그 시작중..");
+            e.dataTransfer.setData("target", e.target.id);
+        });
+        
+        dragItem2.addEventListener("dragstart", (e) => {
+            console.log("드래그 시작중..");
+            e.dataTransfer.setData("target", e.target.id);
+        });
+        
+        dragItem3.addEventListener("dragstart", (e) => {
+            console.log("드래그 시작중..");
+            e.dataTransfer.setData("target", e.target.id);
+        });
+
+        dropZone.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            console.log("이 개체 위에 무언가 올라옴");
+        });
+
+        dropZone.addEventListener("drop", (e) => {
+            e.preventDefault();
+            const data = event.dataTransfer.getData("target");
+            console.log("드롭 발생");
+            // DOM 트리 구조상, 멀티 parent를 가질 수 없으, 그래서 appendChild하면 이전에서 떨어짐
+            const draggedElement = document.getElementById(data);
+            dropZone.appendChild(draggedElement);
+        });
+    </script>
+</body>
+</html>
