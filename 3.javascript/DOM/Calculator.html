@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>계산기</title>
+    <style>
+        .calculator {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 10px;
+            max-width: 300px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .calculator input {
+            grid-column: span 4;
+            padding: 10px;
+            font-size: 20px;
+        }
+
+        .calculator button {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="calculator">
+        <input type="text" id="inputnum" readonly>
+        
+        <button onclick="document.getElementById('inputnum').value += '+'">+</button>
+        <button onclick="document.getElementById('inputnum').value += '-'">-</button>
+        <button onclick="document.getElementById('inputnum').value += '*'">*</button>
+        <button onclick="document.getElementById('inputnum').value += '/'">/</button>
+        <button onclick="document.getElementById('inputnum').value += '7'">7</button>
+        <button onclick="document.getElementById('inputnum').value += '8'">8</button>
+        <button onclick="document.getElementById('inputnum').value += '9'">9</button>
+        <button onclick="calculate()">=</button>
+        <button onclick="document.getElementById('inputnum').value += '4'">4</button>
+        <button onclick="document.getElementById('inputnum').value += '5'">5</button>
+        <button onclick="document.getElementById('inputnum').value += '6'">6</button>
+        <button onclick="clear()">C</button>
+        <button onclick="document.getElementById('inputnum').value += '1'">1</button>
+        <button onclick="document.getElementById('inputnum').value += '2'">2</button>
+        <button onclick="document.getElementById('inputnum').value += '3'">3</button>
+        <button onclick="document.getElementById('inputnum').value += '0'">0</button>
+    </div>
+
+    <script>
+        function calculate() {
+            var input = document.getElementById("inputnum");
+            var result = eval(inputnum.value);
+            input.value = result;
+        }
+
+        function clear() {
+            var input = document.getElementById("inputnum");
+            input.value = "";
+        }
+    </script>
+</body>
+</html>
