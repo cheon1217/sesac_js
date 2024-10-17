@@ -23,6 +23,24 @@
             padding: 10px;
         }
     </style>
+    <script>
+        function calculate() {
+            var input = document.getElementById("inputnum");
+            
+            try {
+                var result = eval(inputnum.value);
+                input.value = result;
+            } catch (error) {
+                input.value = "Error";
+            }
+
+        }
+
+        function clearInput() {
+            var input = document.getElementById("inputnum");
+            input.value = "";
+        }
+    </script>
 </head>
 <body>
     
@@ -40,24 +58,12 @@
         <button onclick="document.getElementById('inputnum').value += '4'">4</button>
         <button onclick="document.getElementById('inputnum').value += '5'">5</button>
         <button onclick="document.getElementById('inputnum').value += '6'">6</button>
-        <button onclick="clear()">C</button>
+        <button onclick="clearInput()">C</button>
         <button onclick="document.getElementById('inputnum').value += '1'">1</button>
         <button onclick="document.getElementById('inputnum').value += '2'">2</button>
         <button onclick="document.getElementById('inputnum').value += '3'">3</button>
         <button onclick="document.getElementById('inputnum').value += '0'">0</button>
     </div>
 
-    <script>
-        function calculate() {
-            var input = document.getElementById("inputnum");
-            var result = eval(inputnum.value);
-            input.value = result;
-        }
-
-        function clear() {
-            var input = document.getElementById("inputnum");
-            input.value = "";
-        }
-    </script>
 </body>
 </html>
