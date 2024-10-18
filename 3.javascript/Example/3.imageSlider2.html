@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        .box {
+            width: 500px;
+            margin: 0 auto;
+        }
+
+        .slide {
+            width: 500px;
+            height: 333px;
+            overflow: hidden;
+        }
+
+        .images {
+            display: flex;
+            height: 333px;
+            transition: 0.5s;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        img {
+            width: 500px;
+            height: 333px;
+        }
+
+        .prev {
+            position: relative;
+            bottom: 170px;
+            right: 60px;
+        }
+
+        .next {
+            position: relative;
+            bottom: 170px;
+            left: 455px;
+        }
+
+        button {
+            width: 50px;
+            height: 30px;
+            border: none;
+            color: white;
+            background-color: teal;
+            outline: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: turquoise;
+        }
+
+        button:disabled {
+            background-color: gray;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>Image Gallery</h1>
+        <div class="slide">
+            <div class="images">
+                <img src="../../images/cat1.jpg">
+                <img src="../../images/cat2.jpg">
+                <img src="../../images/cat3.jpg">
+            </div>
+        </div>
+        <button class="prev">prev</button>
+        <button class="next">next</button>
+    </div>
+
+    <script>
+        let pages = 0;
+        let positionValue = 0;
+        const IMAGE_WIDTH = 500;
+
+        const prevBtn = document.querySelector(".prev");
+        const nextBtn = document.querySelector(".next");
+        const images = document.querySelector(".images");
+
+        function next() {
+            if (pages < 2) {
+                prevBtn.removeAttribute("disabled");
+                positionValue -= IMAGE_WIDTH;
+                images.style.transform = `translateX(${positionValue}px)`;
+                pages += 1;
+            }
+            if (pages === 2) {
+                nextBtn.setAttribute("disabled", "true")
+            }
+        }
+
+        function prev() {
+            if (pages > 0) {
+                nextBtn.removeAttribute("disabled");
+                positionValue += IMAGE_WIDTH;
+                images.style.transform = `translateX(${positionValue}px)`;
+                pages -= 1;
+            }
+            if (pages === 0) {
+                prevBtn.setAttribute("disabled", "true")
+            }
+        }
+
+        function init() {
+            prevBtn.setAttribute("disabled", "true");
+            prevBtn.addEventListener("click", prev);
+            nextBtn.addEventListener("click", next);
+        }
+
+        init();
+    </script>
+</body>
+</html>

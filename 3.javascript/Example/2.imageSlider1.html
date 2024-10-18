@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        .slider-wrap {
+            width: 100%;
+            height: 75vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slider-img {
+            position: relative;
+            width: 800px;
+            height: 450px;
+            overflow: hidden;
+        }
+
+        .slider-inner {
+            display: flex;
+            flex-wrap: wrap;
+            width: 4800px;
+            height: 450px;
+            position: relative;
+        }
+        
+        .slider {
+            position: relative;
+            width: 800px;
+            height: 450px;
+        }
+
+        .slider img {
+            width: 800px;
+            height: 450px;
+        }
+
+        .slider-btn a {
+            position: absolute;
+            top: 50%;
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.4);
+            text-align: center;
+            line-height: 50px;
+            color: #fff;
+        }
+
+        .slider-btn a.prev {
+            left: 0;
+        }
+
+        .slider-btn a.next {
+            right: 0;
+        }
+    </style>
+</head>
+<body> 
+    <header>
+        <h1>Image Slider</h1>
+    </header>
+    <main>
+        <div class="slider-wrap">
+            <div class="slider-img">
+                <div class="slider-inner">
+                    <div class="slider"><img src="../../images/cat1.jpg" alt="이미지1"></div>
+                    <div class="slider"><img src="../../images/cat2.jpg" alt="이미지2"></div>
+                    <div class="slider"><img src="../../images/cat3.jpg" alt="이미지3"></div>
+                </div>
+            </div>
+            <div class="slider-btn">
+                <a href="#" class="prev" role="button">prev</a>
+                <a href="#" class="next" role="button">next</a>
+            </div>
+    </main>
+
+    <script>
+        const sliderImg = document.querySelector(".slider-img");        
+        const sliderInner = document.querySelector(".slider-inner");    
+        const slider = document.querySelectorAll(".slider");    
+        const sliderBtnPrev = document.querySelector(".prev");       
+        const sliderBtnNext = document.querySelector(".next");       
+
+        let currentIndex = 0;       
+        let sliderCount = slider.length;
+        let sliderWidth = sliderImg.offsetWidth; 
+        
+ 
+        function goSlider(num){
+            // sliderInner.style.transition = "all 0.4s";
+            sliderInner.style.transform = "translateX("+ -sliderWidth * num+"px)";
+            currentIndex = num;
+        }
+        
+        sliderBtnPrev.addEventListener("click", () => {
+            let prevIndex = (currentIndex + (sliderCount-1)) % sliderCount;
+            goSlider(prevIndex);
+        });
+
+        sliderBtnNext.addEventListener("click", () => {
+            let nextIndex = (currentIndex + 1) % sliderCount 
+            goSlider(nextIndex);
+        });
+    </script>
+</body>
+</html>
