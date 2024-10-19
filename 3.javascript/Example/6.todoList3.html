@@ -112,6 +112,14 @@
             content: "";
         }
 
+        .new-todo input:checked ~ .check-mark {
+            background-color: #000;
+        }
+
+        .new-todo input:checked ~ .check-mark::after {
+            display: block;
+        }
+
         .rm-btn::after {
             position: absolute;
             right: 5px;

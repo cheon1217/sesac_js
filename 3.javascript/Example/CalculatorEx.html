@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculator</title>
+    <style>
+        .wrap {
+            margin: 100px auto;
+            width: 300px;
+            height: 400px;
+            border: 1px solid transparent;
+            background-color: rgb(151, 151, 151);
+            border-radius: 5px;
+        }
+
+        .input {
+            height: 20px;
+            text-align: right;
+        }
+
+        .display {
+            display: flex;
+            flex-direction: column;
+            height: 50px;
+            font-size: 36px;
+            font-weight: 700;
+            border: 1px solid #777676;
+            margin: 5px 5px 0 5px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #777676;
+            color: #ccc;
+        }
+
+        .buttons {
+            padding: 5px;
+            display: grid;
+            height: calc(100% - 85px);
+            gap: 5px;
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        button {
+            color: #fff;
+            font-size: 36px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .numBtn {
+            background-color: #828284;
+        }
+
+        .operator,
+        .result, 
+        .ac {
+            background-color: orange;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="wrap">
+        <div class="display">
+            <div class="input"></div>
+        </div>
+        <div class="buttons">
+            <button data-type="ac" class="ac">C</button>
+            <button data-type="operator" class="operator">+</button>
+            <button data-type="operator" class="operator">-</button>
+            <button data-type="operator" class="operator">x</button>
+            <button class="numBtn">7</button>
+            <button class="numBtn">8</button>
+            <button class="numBtn">9</button>
+            <button data-type="operator" class="operator">/</button>
+            <button class="numBtn">4</button>
+            <button class="numBtn">5</button>
+            <button class="numBtn">6</button>
+            <button data-type="result" class="result">=</button>
+            <button class="numBtn">1</button>
+            <button class="numBtn">2</button>
+            <button class="numBtn">3</button>
+            <button class="numBtn">0</button>
+        </div>
+    </div>
+
+    <script>
+        const buttons = document.querySelectorAll("button");
+        const operators = document.querySelectorAll(".operator");
+        const displayElement = document.querySelector(".input");
+        const numBtn = document.querySelectorAll(".numBtn");
+
+        let operatorOn = ""; // 연산자 입력
+        let previousNum = ""; // 이전 값 
+        let currentNum = ""; // 현재 값
+
+        let calculate = (n1, operator, n2) => {
+            let result = 0;
+            switch (operator) {
+                case "+": 
+                    result = Number(n1) + Number(n2);
+                    break;
+                case "-": 
+                    result = Number(n1) - Number(n2);
+                    break;
+                case "x": 
+                    result = Number(n1) * Number(n2);
+                    break;
+                case "/": 
+                    result = Number(n1) / Number(n2);
+                    break;
+                default : 
+                    break;
+            }
+            return String(result);
+        }
+
+        let calculator = () => {
+            let isFirstDigit = true; // 첫번째 숫자 여부를 판단하는 변수
+
+            buttons.forEach((item) => {
+                item.addEventListener("click", (e) => {
+                    let action = e.target.classList[0];
+                    let click = e.target.innerHTML;
+
+                    if (action === "operator") {
+                        operatorOn = click;
+                        previousNum = displayElement.textContent;
+                        displayElement.textContent = "";
+                        isFirstDigit = true;
+                    }
+                    if (action === "numBtn") {
+                        if (isFirstDigit && click === "0") {
+                            return;
+                        }
+
+                        if (displayElement.textContent === "" && operatorOn === "") {
+                            displayElement.textContent = click;
+                            previousNum = displayElement.textContent;
+                        } else if (displayElement.textContent !== "" && operatorOn === "") {
+                            displayElement.textContent = 
+                            displayElement.textContent + click;
+                            previousNum = displayElement.textContent;
+                        } else if (displayElement.textContent === '' && operatorOn !== '') {
+                            displayElement.textContent = click;
+                            resentNum = displayElement.textContent;
+                        } else if (displayElement.textContent !== '' && operatorOn !== '') {
+                            displayElement.textContent = displayElement.textContent + click;
+                            resentNum = displayElement.textContent;
+                        }
+                        isFirstDigit = false;
+                    }
+
+                    if (action === "result") {
+                        displayElement.textContent = calculate(previousNum, operatorOn, currentNum);
+                        isFirstDigit = true;
+                    }
+
+                    if (action === "ac") {
+                        displayElement.textContent = "";
+                        previousNum = "";
+                        operatorOn = "";
+                        currentNum = "";
+                        isFirstDigit = true;    
+                    }
+                })
+            })
+        }
+        calculator();
+    </script>
+</body>
+</html>
