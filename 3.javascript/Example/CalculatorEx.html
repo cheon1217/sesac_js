@@ -139,15 +139,14 @@
                             displayElement.textContent = click;
                             previousNum = displayElement.textContent;
                         } else if (displayElement.textContent !== "" && operatorOn === "") {
-                            displayElement.textContent = 
-                            displayElement.textContent + click;
+                            displayElement.textContent = displayElement.textContent + click;
                             previousNum = displayElement.textContent;
                         } else if (displayElement.textContent === '' && operatorOn !== '') {
                             displayElement.textContent = click;
-                            resentNum = displayElement.textContent;
+                            currentNum = displayElement.textContent;
                         } else if (displayElement.textContent !== '' && operatorOn !== '') {
                             displayElement.textContent = displayElement.textContent + click;
-                            resentNum = displayElement.textContent;
+                            currentNum = displayElement.textContent;
                         }
                         isFirstDigit = false;
                     }
