@@ -47,3 +47,30 @@ const apiData = [
 // const fullName = apiData.map(name => name.firstName + name.lastName); // 이 각각의 사용자 객체에서 FULL NAME을 만들기
 const fullName = apiData.map(user => `${user.firstName} ${user.lastName}`);
 console.log(fullName);
+
+const map1 = new Map();
+map1.set("a", 1);
+map1.set("b", 2);
+map1.set("c", 3); 
+
+console.log(map1.get("a")); // 1
+
+map1.set("a", 97);
+console.log(map1.get("a")); // 97
+
+console.log(map1.size); // 3
+
+
+map1.delete("b");
+
+console.log(map1.size);
+
+const contacts = new Map();
+contacts.set("Jessie", { phone: "213-555-1234", address: "123 N 1st Ave" });
+contacts.has("Jessie"); // true
+contacts.get("Hilary"); // undefined
+contacts.set("Hilary", { phone: "617-555-4321", address: "321 S 2nd St" });
+contacts.get("Jessie"); // {phone: "213-555-1234", address: "123 N 1st Ave"}
+contacts.delete("Raymond"); // false
+// contacts.delete("Jessie"); // true
+console.log(contacts); // 1
