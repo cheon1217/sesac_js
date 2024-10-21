@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        .calculator {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 10px;
+            max-width: 300px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .calculator input {
+            grid-column: span 4;
+            padding: 10px;
+        }
+
+        .calculator button {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" id="result" readonly>
+        <button onclick="appendSymbol(this.innerText)">+</button>
+        <button onclick="appendSymbol(this.innerText)">-</button>
+        <button onclick="appendSymbol(this.innerText)">*</button>
+        <button onclick="appendSymbol(this.innerText)">/</button>
+        <button onclick="appendNumber(this.innerText)">7</button>
+        <button onclick="appendNumber(this.innerText)">8</button>
+        <button onclick="appendNumber(this.innerText)">9</button>
+        <button onclick="calculate()">=</button>
+        <button onclick="appendNumber(this.innerText)">4</button>
+        <button onclick="appendNumber(this.innerText)">5</button>
+        <button onclick="appendNumber(this.innerText)">6</button>
+        <button onclick="clearResult()">C</button>
+        <button onclick="appendNumber(this.innerText)">1</button>
+        <button onclick="appendNumber(this.innerText)">2</button>
+        <button onclick="appendNumber(this.innerText)">3</button>
+        <button onclick="appendNumber(this.innerText)">0</button>
+    </div>
+
+    <script>
+        function appendNumber(number) {
+            // 이전에 심볼 추가한거랑 똑같이 구현하기
+            document.getElementById("result").value += number;
+        }
+
+        function isSymbol(value) { 
+            return ["+", "-", "*", "/"].includes(value);
+        }
+
+        function appendSymbol(symbol) {
+            const resultDom = document.getElementById("result");
+            // 이 칸에 있는 이전 글자가 무엇인지?
+            const lastInput = resultDom.value[resultDom.value.length - 1];
+            // 그래서, 그게 숫자였으면.. 심볼을 더할 수 있음
+            // 근데, 그게 심볼이면.. 심볼을 더할 수 없음
+            if (isSymbol(lastInput)) { // 같은 거 중복 심볼 입력 방지 ... 중요한 것은 어떠한 심볼이던지!!
+                // resultDom.value += symbol;
+                resultDom.value = resultDom.value.slice(0, -1) + symbol;
+            } else {
+                resultDom.value += symbol;
+            }
+        }
+
+        function calculate() {
+            const resultDom = document.getElementById("result");
+            const lastInput = resultDom.value[resultDom.value.length - 1];
+            if (isSymbol(lastInput)) {
+                // 심볼로 끝났으면 마지막 심볼 삭제
+                // resultDom.value = resultDom.value.slice(0, -1);
+                resultDom.value = "Error";
+                return;
+            }
+            const result = eval(resultDom.value);
+            resultDom.value = result;
+        };
+
+        function clearResult() {
+            document.getElementById("result").value = "";
+        };
+    </script>
+</body>
+</html>
