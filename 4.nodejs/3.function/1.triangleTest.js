@@ -37,3 +37,61 @@ function leftInvertTriangle() {
 
 leftInvertTriangle();
 console.log();
+
+function rightTriangle() {
+    let rows = 5;
+    let currentRow = 1;
+    while (currentRow <= rows) {
+        let spaces = "";
+        let stars = "";
+
+        let spaceCount = 1;
+        while (spaceCount <= rows - currentRow) {
+            spaces += " ";
+            spaceCount++;
+        }
+
+        let starCount = 1;
+        while (starCount <= currentRow) {
+            stars += "*";
+            starCount++;
+        }
+
+        console.log(spaces + stars);
+        currentRow++;
+    }
+}
+
+rightTriangle();
+console.log();
+
+function rightInvertTriangle() {
+    let rows = 5;
+    let currentRow = rows;
+    while (currentRow >= 1) {
+        let spaces = "";
+        let stars = "";
+
+        let spaceCount = 1;
+        while (spaceCount <= rows - currentRow) {
+            spaces += " ";
+            spaceCount++;
+        }
+
+        let starCount = 1;
+        while (starCount <= currentRow) {
+            stars += "*";
+            starCount++;
+        }
+
+        console.log(spaces + stars);
+        currentRow--;
+    }
+}
+
+rightInvertTriangle();
+console.log();
+
+function doubleSideTriangle() {
+    
+}
