@@ -19,8 +19,13 @@ class Car { // 실명, 호이스팅 O, 초기화는 X
 
 // 클래스 사용
 const myCar = new Car("현대차", "k5");
+const myCar2 = new Car("기아차", "모닝");
 console.log(myCar);
 
 console.log(myCar.drive());
 console.log(myCar.open());
 console.log(myCar.close());
+
+console.log(myCar2.drive());
+console.log(myCar2.open());
+console.log(myCar2.close());
