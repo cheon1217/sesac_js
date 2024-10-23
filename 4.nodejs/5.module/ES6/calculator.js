@@ -1,22 +1,18 @@
-function add(a, b) {
+export function add(a, b) {
     return a + b;
 }
 
-function sub(a, b) {
+export function sub(a, b) {
     return a - b;
 }
 
-function mul(a, b) {
+export function mul(a, b) {
     return a * b;
 }
 
-function div(a, b) {
+export function div(a, b) {
     if (b === 0) {
         return "0으로 나눌 수 없음";
     }
     return a / b;
 }
-
-module.exports = {
-    add, sub, mul, div
-};
