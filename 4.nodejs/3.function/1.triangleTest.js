@@ -93,5 +93,54 @@ rightInvertTriangle();
 console.log();
 
 function doubleSideTriangle() {
-    
+    let rows = 5;
+    let currentRow = 1;
+    while (currentRow <= rows) {
+        let spaces = "";
+        let stars = "";
+
+        let spaceCount = 1;
+        while (spaceCount <= rows - currentRow) {
+            spaces += " ";
+            spaceCount++;
+        }
+
+        let starCount = 1;
+        while (starCount <= 2 * currentRow - 1) {
+            stars += "*";
+            starCount++;
+        }
+
+        console.log(spaces + stars);
+        currentRow++;
+    }
 }
+
+doubleSideTriangle();
+console.log();
+
+function doubleSideInvertTriangle() {
+    let rows = 5;
+    let currentRow = rows;
+    while (currentRow >= 1) {
+        let spaces = "";
+        let stars = "";
+
+        let spaceCount = 1;
+        while (spaceCount <= rows - currentRow) {
+            spaces += " ";
+            spaceCount++;
+        }
+
+        let starCount = 1;
+        while (starCount <= 2 * currentRow - 1) {
+            stars += "*";
+            starCount++;
+        }
+
+        console.log(spaces + stars);
+        currentRow--;
+    }
+}
+
+doubleSideInvertTriangle();
