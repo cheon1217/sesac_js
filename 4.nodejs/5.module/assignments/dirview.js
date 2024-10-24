@@ -9,13 +9,13 @@ function tree(directoryPath, content = "") {
     allF.forEach((file, index) => {
         const filePath = path.join(directoryPath, file);
         const lastFile = index === allF.length - 1;
-        const connector = lastFile ? "+" : "+-+";
+        const connector = lastFile ? "+-+   " : "+  ";
 
         console.log(content + connector + file);
 
         const isDir = fs.statSync(filePath).isDirectory();
         if (isDir) {
-            const newContent = content + (lastFile ? "   " : "\\--");
+            const newContent = content + (lastFile ? "\\--" : `${connector}  `);
             tree(filePath, newContent);
         }
     });
