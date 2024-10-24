@@ -30,10 +30,30 @@ function asyncOperation2(response) {
     });
 }
 
+function asyncOperation3(response) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            console.log("Operation3 completed", response);
+            resolve("Response3");
+        }, 1000);
+    });
+}
+
+function asyncOperation4(response) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            console.log("Operation4 completed", response);
+            resolve("Response4");
+        }, 1000);
+    });
+}
+
+
+
 asyncOperation1()
     .then(response1 => asyncOperation2(response1))
-    .then(response2 => asyncOperation1(response2))
-    .then(response3 => asyncOperation2(response3))
+    .then(response2 => asyncOperation3(response2))
+    .then(response3 => asyncOperation4(response3))
     .then(response4 => {
         console.log("Final Result:", response4);
     })
@@ -45,8 +65,8 @@ async function executeOperations() {
     try {
         const response1 = await asyncOperation1(null);
         const response2 = await asyncOperation2(response1);
-        const response3 = await asyncOperation1(response2);
-        const response4 = await asyncOperation2(response3);
+        const response3 = await asyncOperation3(response2);
+        const response4 = await asyncOperation4(response3);
         console.log("Fianl Result:", response4);
     } catch (error) {
         console.error("에러 발생:", error)
