@@ -1,12 +1,13 @@
 const ItemGenerator = require("./generators/Item/ItemGenerator");
 const OrderGenerator = require("./generators/order/orderGenerator");
+const OrderItemGenerator = require("./generators/order/OrderItemGenerator");
 const StoreGenerator = require("./generators/store/StoreGenerator");
 const UserGenerator = require("./generators/user/UserGenerator");
 const { printConsole, saveToCVS } = require("./result/result");
 
 async function main() {
-    const dataType = "order";
-    const count = 10000;
+    const dataType = "user";
+    const count = 1000;
     const result = "csv";
 
     let data;
@@ -28,6 +29,12 @@ async function main() {
             const orderGen = new OrderGenerator();
             await orderGen.init();
             data = orderGen.generateOrders(count);
+            break;
+        case "orderitem":
+            const orderitemGen = new OrderItemGenerator();
+            await orderitemGen.init();
+            data = orderitemGen.generateOrderItems(count);
+            break;
         default:
             console.log("Unsupported data type");
     }

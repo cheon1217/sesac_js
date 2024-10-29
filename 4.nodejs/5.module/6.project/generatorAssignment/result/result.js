@@ -15,6 +15,10 @@ function saveToCVS(data, datatype) {
             break;
         case "order":
             filename = "order.csv";
+            break;
+        case "orderitem":
+            filename = "orderitem.csv";
+            break;
         default:
             console.log("Unsupported data type for CSV output");
     }
@@ -22,7 +26,7 @@ function saveToCVS(data, datatype) {
     const header = Object.keys(data[0]);
     const rows = data.map(item => Object.values(item));
 
-    const csvContent = [header.join(","), ...rows.map(row => row.join(","))].join("\n");
+    const csvContent = [header.join(", "), ...rows.map(row => row.join(", "))].join("\n");
 
     fs.writeFileSync(filename, csvContent, "utf8");
     console.log(`Data saved to ${filename}`);
