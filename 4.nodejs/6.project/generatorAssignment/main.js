@@ -6,9 +6,9 @@ const UserGenerator = require("./generators/user/UserGenerator");
 const { printConsole, saveToCVS } = require("./result/result");
 
 async function main() {
-    const dataType = "user";
-    const count = 1000;
-    const result = "csv";
+    const dataType = "order";
+    const count = 20;
+    const result = "console";
 
     let data;
 
@@ -27,16 +27,16 @@ async function main() {
             break;
         case "order":
             const orderGen = new OrderGenerator();
-            await orderGen.init();
+            await orderGen.bringIn();
             data = orderGen.generateOrders(count);
             break;
         case "orderitem":
             const orderitemGen = new OrderItemGenerator();
-            await orderitemGen.init();
+            await orderitemGen.bringIn();
             data = orderitemGen.generateOrderItems(count);
             break;
         default:
-            console.log("Unsupported data type");
+            console.log("잘못된 데이터타입");
     }
 
     if (result === "csv") {
@@ -44,7 +44,7 @@ async function main() {
     } else if (result === "console") {
         printConsole(data);
     } else {
-        console.log("Unsupported output format.");
+        console.log("없는 항목입니다");
     }
    
 }

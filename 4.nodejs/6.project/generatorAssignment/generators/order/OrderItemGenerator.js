@@ -8,7 +8,8 @@ class OrderItemGenerator extends Generator {
         super();
     }
 
-    async init() {
+    // async 비동기로 선언되어 await 사용 가능 -> 작업이 완료될 때까지 다음 줄로 안넘어감
+    async bringIn() {
         const { orderUuids, itemUuids } = await getUuids();
         this.orderUuids = orderUuids;
         this.itemUuids = itemUuids;

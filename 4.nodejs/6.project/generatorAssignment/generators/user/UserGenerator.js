@@ -19,10 +19,11 @@ class UserGenerator extends Generator {
         const userId = uuid.v4();
         const name = this.nameGenerator.generate();
         const birthdate = this.birthdateGenerator.generate();
+        const age = 2024 - birthdate.slice(0, 4) + 1;
         const gender = this.genderGenerator.generate();
         const address = this.addressGenerator.generate();
         
-        return new User(userId, name, gender, birthdate, address);
+        return new User(userId, name, gender, age, birthdate, address);
     }
 
     generateUsers(count) {
