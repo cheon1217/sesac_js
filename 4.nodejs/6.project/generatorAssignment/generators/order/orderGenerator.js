@@ -56,4 +56,5 @@ class OrderGenerator extends Generator {
     }
 }
 
+
 module.exports = OrderGenerator;
