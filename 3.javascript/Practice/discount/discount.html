@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="contents">
+        <img src="images.png" width="150">
+        <ul>
+            <li>
+                <label for="originalPrice">원래 가격</label>
+                <input type="text" id="originalPrice">원
+            </li>
+            <li>
+                <label for="rate">할인율</label>
+                <input type="text" id="rate">%
+            </li>
+            <li>
+                <button onclick="showPrice()">할인 가격 계산하기</button>
+            </li>
+        </ul>
+        <div id="showResult"></div>
+    </div>
+
+    <script src="priceCalc.js"></script>
+</body>
+</html>
