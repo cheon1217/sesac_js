@@ -5,7 +5,7 @@ const uuid = require("uuid");
 class ItemGenerator extends Generator {
     constructor() {
         super();
-        this.itemTypes = {  // 아이템 타입 배열 안에 배열? 느낌 2중 배열?
+        this.itemTypes = {  
             "Coffee": {
                 "Americano": 2000,
                 "Latte": 3000,
@@ -32,12 +32,7 @@ class ItemGenerator extends Generator {
         };
     }
 
-    generate(itemType) { 
-        // 전달할 것이 없다면 임의로 타입 선택
-        if (!itemType) {
-            itemType = this.getRandomData(Object.keys(this.itemTypes));
-        }
-
+    generate(itemType) {
         const itemId = uuid.v4();
         const itemSubtype = this.getRandomData(Object.keys(this.itemTypes[itemType])); 
         const unitPrice = this.itemTypes[itemType][itemSubtype];

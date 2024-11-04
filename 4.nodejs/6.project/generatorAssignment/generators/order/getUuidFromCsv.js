@@ -29,8 +29,7 @@ function getUuidFromCSV(csvDirectory, csvFilename) {
 
     // CSV의 각 행을 처리하며, data 이벤트가 발생할 때마다 row 객체를 받아서 필요한 작업을 수행
     // promise가 uuids 배열을 resolve로 반환
-    return new Promise((resolve, reject) => {
-        fileStream
+    return new Promise((resolve, reject) => { fileStream
             .on("data", (row) => {
                 uuids.push(row.id); // 각 행의 id값을 uuids 배열에 추가
             })
