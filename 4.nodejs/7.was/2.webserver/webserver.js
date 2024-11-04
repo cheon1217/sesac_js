@@ -14,6 +14,7 @@ const server = http.createServer(async (req, res) => {
     // 힌트: req.url 비교
     // console.log(req.method, req.url);
     try {
+
         // image 폴더를 요청하면 우리는 static 폴더안에 있는 그 파일을 전달해주는걸로
         if (req.method === "GET") {
             if (req.url === "/") {
@@ -38,7 +39,9 @@ const server = http.createServer(async (req, res) => {
                 res.writeHead(200, {"Content-Type": "image/jpg;"});
                 return res.end(imagedata);
             } else if (req.url === "/user") {
-                res.writeHead(200, {"Content-Type": "text/plain; charset=utf-8"});
+                res.writeHead(200, { "Content-Type": "application/json; charset=utf-8"});
+                console.log("사용자 목록: ", users);
+                res.end(JSON.stringify(users));
             } else {
                 res.writeHead(404, {"Content-Type": "text/html; charset=utf-8"});
                 return res.end("Not Found");
@@ -56,10 +59,10 @@ const server = http.createServer(async (req, res) => {
                     // console.log(`데이터가 다 받아진 후: ${body}`);
 
                     const formData = parse(body); // 문자열 name=aaa 가 객체타입으로 변환됨
-                    // console.log("받은 데이터는: ", formData);
+                    console.log("받은 데이터는: ", formData);
                     const username = formData.name;
                     // console.log("그래서 유저네임은??", username);
-                    username[username] = username;
+                    users[username] = username;
                 });
                 res.writeHead(201, {"Content-Type": "text/plain; charset=utf-8"});
                 res.end("등록 성공");
