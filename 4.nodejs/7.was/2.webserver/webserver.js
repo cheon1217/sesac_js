@@ -7,6 +7,8 @@ const path = require("path");
 // 객체 디스트럭처링 (위에 문법을 짧게 줄인 것)
 const { parse } = require("querystring");
 
+const users = {};
+
 const server = http.createServer(async (req, res) => {
     // 만약 사용자가 / 를 요청하면 index.html를 전달하고
     // 만약 사용자가 /about을 요청하면 about.html을 전달하고
@@ -72,7 +74,38 @@ const server = http.createServer(async (req, res) => {
         } else if (req.method === "PUT") {
 
         } else if (req.method === "DELETE") {
+            if (req.url === "/user") {
+                let body = "";
 
+                req.on("data", (data) => {
+                    body += data;
+                    console.log(`데이터가 받아지는 동안의 chunk: ${data}`);
+                });
+
+                req.on("end", () => {
+                    // console.log(`데이터가 다 받아진 후: ${body}`);
+
+                    const formData = parse(body); // 문자열 name=aaa 가 객체타입으로 변환됨
+                    console.log("받은 데이터는: ", formData);
+                    const username = formData.name;
+                    console.log(`삭제할 사용자 이름: ${username}`);
+
+                    const index = users.findIndex((user) => user.name === username);
+                    if (index !== -1) {
+                        users.slice(index, 1);
+                        console.log("사용자가 삭제되었습니다.");
+                        console.log("사용자 목록: ", users);
+                        res.writeHead(200, {"Content-Type": "text/plain; chareset=utf-8"});
+                        res.end("삭제 성공");
+                    } else {
+                        res.writeHead(404, {"Content-Type": "text/html; charset=utf-8"});
+                        return res.end("Not Found");
+                    }
+                });
+            } else {
+                res.writeHead(404, {"Content-Type": "text/html; charset=utf-8"});
+                return res.end("Not Found");
+            }
         } else {
             // GET도 아니고 POST도 아니면
             res.writeHead(404);
