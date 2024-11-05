@@ -97,7 +97,23 @@ function handlePostRequest(req, res) {
 }
 
 function handlePutRequest(req, res) {
-    res.end("PUT요청 응답완료");
+    if (req.url.startsWith("/user/")) {
+        const key = req.url.split("/")[2];
+        let body = "";
+        req.on("data", (data) => body += data);
+        return req.on("end", () => {
+            try {
+                console.log("PUT Body: ", body);
+                users[key] = JSON.parse(body).name;
+                res.writeHead(200, { "Content-Type": "application/json" });
+                return res.end(JSON.stringify(users));
+            } catch (err) {
+                console.error("PUT 요청 처리 중 에러 발생: ", err);
+                res.writeHead(500, {"Content-Type": "text/plain; charset=utf-8"});
+                res.end("서버 내부 오류");
+            }
+        })
+    }
 }
 
 function handleDeleteRequest(req, res) {
