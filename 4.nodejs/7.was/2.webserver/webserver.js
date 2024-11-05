@@ -14,7 +14,6 @@ const server = http.createServer(async (req, res) => {
     // 힌트: req.url 비교
     // console.log(req.method, req.url);
     try {
-
         // image 폴더를 요청하면 우리는 static 폴더안에 있는 그 파일을 전달해주는걸로
         if (req.method === "GET") {
             if (req.url === "/") {
@@ -39,11 +38,11 @@ const server = http.createServer(async (req, res) => {
                 res.writeHead(200, {"Content-Type": "image/jpg;"});
                 return res.end(imagedata);
             } else if (req.url === "/user") {
-                res.writeHead(200, { "Content-Type": "application/json; charset=utf-8"});
-                console.log("사용자 목록: ", users);
-                res.end(JSON.stringify(users));
+                res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
+                return res.end(JSON.stringify(users));
+                
             } else {
-                res.writeHead(404, {"Content-Type": "text/html; charset=utf-8"});
+                res.writeHead(404, { "Content-Type": "text/html; charset=utf-8" });
                 return res.end("Not Found");
             }
         } else if (req.method === "POST") {
@@ -70,6 +69,10 @@ const server = http.createServer(async (req, res) => {
                 res.writeHead(404, {"Content-Type": "text/html; charset=utf-8"});
                 return res.end("Not Found");
             }
+        } else if (req.method === "PUT") {
+
+        } else if (req.method === "DELETE") {
+
         } else {
             // GET도 아니고 POST도 아니면
             res.writeHead(404);
