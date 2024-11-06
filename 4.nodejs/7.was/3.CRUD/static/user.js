@@ -67,15 +67,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         return row;
     }
     
-    function createButton(text, clickHandle) {
+    function createButton(content, func) {
         const button = document.createElement("button");
-        button.textContent = text;
-        button.addEventListener("click", clickHandle);
+        button.textContent = content;
+        button.addEventListener("click", func);
         return button;
     }
 
     async function editUser(userId) {
-        const editName = confirm("수정할 이름을 입력하세요");
+        const editName = prompt("수정할 이름을 입력하세요");
         if (editName !== null) {
             try {
                 const response = await fetch(`/user/${userId}`, {
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     async function deleteUser(userId) {
-        const alertDelete = alert("정말로 삭제할겁니까?");
+        const alertDelete = confirm("정말로 삭제할겁니까?");
         if (alertDelete) {
             try {
                 const response = await fetch(`/user/${userId}`, {
