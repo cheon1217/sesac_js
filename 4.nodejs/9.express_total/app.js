@@ -60,8 +60,8 @@ app.delete("/user/:id", (req, res) => { // id 받아오는 것
 // 오류 미들웨어
 app.use(async (req, res, next) => {
     try {
-        const data = await fs.readFile(path.join(__dirname, "404.html"));
-        res.status(404).send(data);
+        const data = await fs.readFile(path.join(__dirname, "static", "404.html"));
+        res.status(404).type("html").send(data);
     } catch (err) {
         console.error("404 page fail", err);
         res.status(500).send("서버 오류");
