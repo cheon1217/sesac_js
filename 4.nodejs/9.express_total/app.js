@@ -1,6 +1,7 @@
 // 외부 모듈 import
 const express = require("express");
 const path = require("path");
+const fs = require("fs").promises;
 
 // 변수 정의
 const app = express();
@@ -33,15 +34,39 @@ app.post("/user", (req, res) => {
     res.status(201).send("등록 성공"); // 201은 Created
 });
 
-app.put("/user", (req, res) => { // id 받아오는 것
-    res.send("여기 짜야함");
+app.put("/user/:id", (req, res) => { // id 받아오는 것
+    try {
+        const { id } = req.params;
+        users[id] = req.body.name;
+        // res.json(users);
+        res.status(200).send("수정 성공");
+    } catch (err) {
+        console.error("수정 요청 중 에러 발생: ", err);
+        res.status(500).send("서버 오류");
+    }
 });
 
-app.delete("/user", (req, res) => { // id 받아오는 것
-    res.send("여기도 짜야함..");
-})
+app.delete("/user/:id", (req, res) => { // id 받아오는 것
+    try {
+        const { id } = req.params;
+        delete users[id];
+        res.status(204).send("삭제 성공");
+    } catch (err) {
+        console.error("삭제 요청 중 에러 발생:", err);
+        res.status(500).send("서버 오류");
+    }
+});
 
 // 오류 미들웨어
+app.use(async (req, res, next) => {
+    try {
+        const data = await fs.readFile(path.join(__dirname, "404.html"));
+        res.status(404).send(data);
+    } catch (err) {
+        console.error("404 page fail", err);
+        res.status(500).send("서버 오류");
+    }
+})
 
 // 서버 시작
 app.listen(PORT, () => {
