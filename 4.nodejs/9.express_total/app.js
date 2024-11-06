@@ -38,7 +38,6 @@ app.put("/user/:id", (req, res) => { // id 받아오는 것
     try {
         const { id } = req.params;
         users[id] = req.body.name;
-        // res.json(users);
         res.status(200).send("수정 성공");
     } catch (err) {
         console.error("수정 요청 중 에러 발생: ", err);
