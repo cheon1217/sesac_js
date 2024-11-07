@@ -20,3 +20,15 @@ function login() {
         }
     });
 }
+
+function checkLoginStatus() {
+    fetch("/check-login")
+        .then((response) => response.json())
+        .then(data => {
+            if (data.username) {
+                
+            } else {
+
+            }
+        })
+}

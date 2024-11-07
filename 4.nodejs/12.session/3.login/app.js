@@ -64,8 +64,14 @@ app.get("/logout", (req, res) => {
     });
 });
 
-app.get("/", (req, res) => {
-    
+app.get("/check-login", (req, res) => {
+    const user = req.session.user;
+
+    if (user) {
+        res.json({ username: user.username });
+    } else {
+        res.status(404).json({ message: "없는 사용자" });
+    }
 });
 
 app.listen(port, () => {
