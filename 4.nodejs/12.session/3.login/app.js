@@ -7,15 +7,18 @@ const app = express();
 const port = 3000;
 
 app.use(session({
-    secret: "my-secret-key",
+    secret: "your-secret-key",
     resave: false,
     saveUninitialized: true,
+    cookie: {
+        maxAge: 60000,
+    },
 }));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use("/public", express.static(path.join(__dirname, "public")));
+app.use("/static", express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "login.html"));

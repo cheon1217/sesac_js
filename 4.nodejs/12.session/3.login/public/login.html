@@ -15,16 +15,23 @@
         </ul>
     </nav>
     <h1>로그인</h1>
-    <form id="loginForm">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required />
-        <br />
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required />
-        <br />
-        <button type="button" onclick="login()">로그인</button>
-    </form>
+    <div id="loginFormContainer">
+        <form id="loginForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required />
+            <br />
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required />
+            <br />
+            <button type="button" id="loginButton">로그인</button>
+        </form>
+    </div>
 
-    <script src="/public/login.js"></script>
+    <div id="profile" style="display: none;">
+        <h2>Welcome, <span id="usernameSpan"></span>!</h2>
+        <button id="logoutButton">로그아웃</button>
+    </div>
+
+    <script src="/static/login.js"></script>
 </body>
 </html>
