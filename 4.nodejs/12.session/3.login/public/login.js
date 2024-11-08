@@ -17,7 +17,7 @@ async function checkLoginStatus() {
         }
     } catch (err) {
         console.error("로그인 상태 확인 오류: ", err);
-            showLoginForm();
+        showLoginForm();
     }
 }
 
