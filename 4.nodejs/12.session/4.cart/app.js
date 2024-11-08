@@ -43,15 +43,46 @@ app.post("/add-to-cart/:productId", (req, res) => {
     // TODO: 장바구니에 담는 코드 작성
     const cart = req.session.cart || []; // 있으면 해당 세션의 카트 가져오고 없으면 빈 배열로 초기화
     
-    cart.push({
-        id: product.id,
-        name: product.name,
-        price: product.price
-    });
+    // 상품이 이미 장바구니에 있는지 확인
+    const existingItem = cart.find((item) => item.id === productId);
+
+    if (existingItem) {
+        existingItem.count += 1; // 있다면 개수 증가
+    } else {
+        cart.push({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            count: 1,
+        });
+    }
 
     req.session.cart = cart;
 
-    res.json({message: "상품이 장바구니에 담겼습니다."});
+    res.json({message: "상품이 장바구니에 담겼습니다.", cart});
+});
+
+app.post("/update-product/:productId", (req, res) => {
+    const productId = parseInt(req.params.productId);
+    const modify = parseInt(req.query.modify);
+
+    if (isNaN(productId) || isNaN(modify)) {
+        return res.status(400).json({ message: "잘못된 요청" });
+    }
+
+    const cart = req.session.cart || [];
+
+    const item = cart.find((i) => i.id === productId);
+
+    if (!item) {
+        return res.status(404).json({ message: "상품을 찾을 수 없음" });
+    }
+
+    item.count = Math.max(1, item.count + modify);
+
+    req.session.cart = cart;
+
+    res.json(cart);
 });
 
 app.listen(port, () => {

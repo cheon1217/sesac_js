@@ -30,6 +30,16 @@
             </tr>
         </thead>
         <tbody><!-- 실제 상품이 출력될 곳 --></tbody>
+        <tfoot>
+            <tr id="emptyCart" style="display: none;">
+                <td colspan="5" style="background-color: #fff; text-align: center;">장바구니가 비었습니다.</td>
+            </tr>
+            <tr>
+                <td colspan="3"></td>
+                <td>Total:</td>
+                <td id="totalCount" class="total"></td>
+            </tr>
+        </tfoot>
     </table>
 
     <script src="/js/cart.js"></script>
