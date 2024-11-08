@@ -5,58 +5,60 @@ document.addEventListener("DOMContentLoaded", () => {
    document.getElementById("logoutButton").addEventListener("click", logout);
 });
 
-function checkLoginStatus() {
-    fetch("/check-login")
-        .then((response) => response.json())
-        .then(data => {
-            if (data.username) {
-                showProfile(data.username);
-            } else {
-                showLoginForm();
-            }
-        })
-        .catch(err => {
-            console.error("로그인 상태 확인 오류: ", err);
+async function checkLoginStatus() {
+    try {
+        const response = await fetch("/check-login");
+        const data = await response.json();
+
+        if (data.username) {
+            showProfile(data.username);
+        } else {
             showLoginForm();
-        });
+        }
+    } catch (err) {
+        console.error("로그인 상태 확인 오류: ", err);
+            showLoginForm();
+    }
 }
 
-function login() {
+async function login() {
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
-    fetch("/login", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ username, password }),
-    })
-        .then((response) => {
-            if (response.status === 200) {
-                return response.json();
-            } else {
-                throw new Error("로그인 실패");
-            }
-        })
-        .then(data => {
+    try {
+        const response = await fetch("/login", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ username, password }),
+        });
+        
+        if (response.status === 200) {
+            const data = await response.json();
             console.log(data.message);
             checkLoginStatus();
-        })
-        .catch(err => {
-            console.error("로그인 오류: ", err);
-            alert("로그인 실패");
-        });
+        } else {
+            throw new Error("로그인 실패");
+        }
+    } catch (err) {
+        console.error("로그인 오류: ", err);
+        alert("로그인 실패");
+    }
 }
 
-function logout() {
-    fetch("/logout")
-        .then(response => response.json())
-        .then(data => {
-            if (data.message === "로그아웃 성공") {
-                showLoginForm();
-            } else {
-                alert("로그아웃 실패");
-            }
-        });
+async function logout() {
+    try {
+        const response = await fetch("/logout");
+        const data = response.json();
+    
+        if (data.message === "로그아웃 성공") {
+            showLoginForm();
+        } else {
+            alert("로그아웃 실패");
+        }
+    } catch (err) {
+        console.error("로그아웃 오류: ", err);
+        alert("로그아웃 실패");
+    }
 }
 
 function showProfile(username) {
