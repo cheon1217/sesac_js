@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     fetch("/cart")
         .then(response => response.json())
-        .then(products => displayCart(products));
+        .then(cartItem => displayCart(cartItem));
 });
 
 function displayProducts(products) {
@@ -26,16 +26,16 @@ function displayProducts(products) {
     });
 }
 
-function displayCart(cart) {
-    const cartAll = cart.cart || [];
+function displayCart(cartItem) {
+    const cart = cartItem.cart || [];
     const cartTabletbody = document.querySelector("#cartTable tbody");
-    const total = document.querySelector("#totalCount");
+    const totalSpan = document.querySelector("#totalCount");
     const emptyCartRow = document.querySelector("#emptyCart");
 
     cartTabletbody.innerHTML = "";
     emptyCartRow.style.display = "none";
 
-    if (cartAll.length === 0) {
+    if (cart.length === 0) {
         emptyCartRow.style.display = "table-row";
     }
 
@@ -48,7 +48,7 @@ function displayCart(cart) {
             <td>${item.name}</td>
             <td>${item.price}</td>
             <td>
-                <span class="modify" id="modify-${item.id}">${item.count}</span>
+                <span class="count" id="count-${item.id}">${item.count}</span>
                 <button onclick="increase(${item.id})">+</button>
                 <button onclick="decrease(${item.id})">-</button>
             </td>
@@ -59,7 +59,7 @@ function displayCart(cart) {
     });
 
     console.log(totalCount);
-    total.textContent = totalCount;
+    totalSpan.textContent = totalCount;
 }
 
 function increase(productId) {
@@ -73,9 +73,17 @@ function decrease(productId) {
 function updateCount(productId, modify) {
     fetch(`/update-product/${productId}?modify=${modify}`, { method: "POST" })
         .then((response) => response.json())
-        .then((cart) => {
-            displayCart(cart);
+        .then((cartItem) => {
+            displayCart(cartItem);
         });
+}
+
+function removeProduct(productId) {
+    fetch(`remove-Product/${productId}`, { method: "POST" })
+        .then((response) => response.json())
+        .then((cartItem) => {
+            displayCart(cartItem);
+        })
 }
 
 function addToCart(productId) {
@@ -86,7 +94,7 @@ function addToCart(productId) {
             alert(data.message);
             fetch("/cart")
                 .then((response) => response.json())
-                .then((cart) => {
+                .then(() => {
                     window.location.href = "/index.html";
                 });
         });

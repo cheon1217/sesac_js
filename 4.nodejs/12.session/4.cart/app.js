@@ -27,7 +27,7 @@ app.get("/products", (req, res) => {
 
 app.get("/cart", (req, res) => {
     const cart = req.session.cart || [];
-    res.json(cart);
+    res.json({ cart, totalCount: calculateTotalCount(cart) });
     // TODO: 카트 항목의 합산 가격도 반환하기
 })
 
@@ -59,7 +59,7 @@ app.post("/add-to-cart/:productId", (req, res) => {
 
     req.session.cart = cart;
 
-    res.json({message: "상품이 장바구니에 담겼습니다.", cart});
+    res.json({ message: "상품이 장바구니에 담겼습니다.", cart, totalCount: calculateTotalCount(cart) });
 });
 
 app.post("/update-product/:productId", (req, res) => {
@@ -82,9 +82,34 @@ app.post("/update-product/:productId", (req, res) => {
 
     req.session.cart = cart;
 
-    res.json(cart);
+    res.json({ cart, totalCount: calculateTotalCount(cart) });
+});
+
+app.post("/remove-product/:productId", (req, res) => {
+    const productId = parseInt(req.params.productId);
+
+    if (isNaN(productId)) {
+        return res.status(400).json({ message: "잘못된 요청" });
+    }
+
+    // const로 주면 error발생
+    let cart = req.session.cart || [];
+    const cartItemInd = cart.findIndex((i) => i.id === productId);
+
+    if (cartItemInd === -1) {
+        return res.status(404).json({ message: "상품을 찾을 수 없음" });
+    }
+
+    cart = cart.filter((_, i) => i !== cartItemInd);
+    req.session.cart = cart;
+
+    res.json({ cart, totalCount: calculateTotalCount(cart) });
 });
 
 app.listen(port, () => {
     console.log("Server Ready");
 });
+
+function calculateTotalCount(cart) {
+    return cart.reduce((total, item) => total + item.price * item.count, 0);
+}
