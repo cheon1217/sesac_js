@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", () => {
    
    document.getElementById("loginButton").addEventListener("click", login);
    document.getElementById("logoutButton").addEventListener("click", logout);
+
+   document.addEventListener("click", keepUserLogin);
 });
 
 async function checkLoginStatus() {
@@ -48,7 +50,7 @@ async function login() {
 async function logout() {
     try {
         const response = await fetch("/logout");
-        const data = response.json();
+        const data = await response.json();
     
         if (data.message === "로그아웃 성공") {
             showLoginForm();
@@ -58,6 +60,16 @@ async function logout() {
     } catch (err) {
         console.error("로그아웃 오류: ", err);
         alert("로그아웃 실패");
+    }
+}
+
+async function keepUserLogin() {
+    try {
+        const response = await fetch("/user-loginStatus-keep");
+        const data = await response.json();
+        console.log("활동 중: ", data.message);
+    } catch (err) {
+        console.error("활동 중 에러: ", err);
     }
 }
 

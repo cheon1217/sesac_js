@@ -15,7 +15,7 @@ app.use(session({
     },
 }));
 
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use("/static", express.static(path.join(__dirname, "public")));
@@ -73,8 +73,14 @@ app.get("/check-login", (req, res) => {
     if (user) {
         res.json({ username: user.username });
     } else {
-        res.status(404).json({ message: "없는 사용자" });
+        res.status(401).json({ message: "없는 사용자" });
     }
+});
+
+app.get("/user-loginStatus-keep", (req, res) => {
+    req.session.touch();
+
+    res.json({ message: "활동중.." });
 });
 
 app.listen(port, () => {
