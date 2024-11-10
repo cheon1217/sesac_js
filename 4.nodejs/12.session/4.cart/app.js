@@ -92,15 +92,19 @@ app.post("/remove-product/:productId", (req, res) => {
         return res.status(400).json({ message: "잘못된 요청" });
     }
 
-    // const로 주면 error발생
-    let cart = req.session.cart || [];
+    // const로 주면 error발생 -> 재할당이 불가능하기 때문 그러므로 let 사용해야함 (새로운 배열로 재할당 가능) - filter 이용해서 삭제
+    // let cart = req.session.cart || [];
+
+    // 하지만 const로도 사용 가능 -> splice로 직접 짤라냄
+    const cart = req.session.cart || [];
     const cartItemInd = cart.findIndex((i) => i.id === productId);
 
     if (cartItemInd === -1) {
         return res.status(404).json({ message: "상품을 찾을 수 없음" });
     }
 
-    cart = cart.filter((_, i) => i !== cartItemInd);
+    // cart = cart.filter((_, i) => i !== cartItemInd);
+    cart.splice(cartItemInd, 1);
     req.session.cart = cart;
 
     res.json({ cart, totalCount: calculateTotalCount(cart) });
