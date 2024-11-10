@@ -31,7 +31,7 @@ app.get("/cart", (req, res) => {
     // TODO: 카트 항목의 합산 가격도 반환하기
 })
 
-app.post("/add-to-cart/:productId", (req, res) => {
+app.post("/cart/:productId", (req, res) => {
     const productId = parseInt(req.params.productId);
     // console.log(productId, typeof productId);
     const product = products.find((p) => p.id === productId);
@@ -62,7 +62,7 @@ app.post("/add-to-cart/:productId", (req, res) => {
     res.json({ message: "상품이 장바구니에 담겼습니다.", cart, totalCount: calculateTotalCount(cart) });
 });
 
-app.post("/update-product/:productId", (req, res) => {
+app.put("/cart/:productId", (req, res) => {
     const productId = parseInt(req.params.productId);
     const modify = parseInt(req.query.modify);
 
@@ -85,7 +85,7 @@ app.post("/update-product/:productId", (req, res) => {
     res.json({ cart, totalCount: calculateTotalCount(cart) });
 });
 
-app.post("/remove-product/:productId", (req, res) => {
+app.delete("/cart/:productId", (req, res) => {
     const productId = parseInt(req.params.productId);
 
     if (isNaN(productId)) {

@@ -71,7 +71,7 @@ function decrease(productId) {
 };
 
 function updateCount(productId, modify) {
-    fetch(`/update-product/${productId}?modify=${modify}`, { method: "POST" })
+    fetch(`/cart/${productId}?modify=${modify}`, { method: "PUT" })
         .then((response) => response.json())
         .then((cartItem) => {
             displayCart(cartItem);
@@ -79,15 +79,23 @@ function updateCount(productId, modify) {
 }
 
 function removeProduct(productId) {
-    fetch(`remove-Product/${productId}`, { method: "POST" })
-        .then((response) => response.json())
+    fetch(`/cart/${productId}`, { method: "DELETE" })
+        .then(async (response) => {
+            if (response.status === 200) {
+                return response.json();
+            } else if (response.status === 204) {
+                return {};
+            } else {
+                throw new Error("삭제 실패");
+            }
+        })
         .then((cartItem) => {
             displayCart(cartItem);
         })
 }
 
 function addToCart(productId) {
-    fetch(`/add-to-cart/${productId}`, {method: "POST"})
+    fetch(`/cart/${productId}`, {method: "POST"})
     // TODO: 나중에 성공,실패 등등 확인하는 코드 작성
         .then((response) => response.json())
         .then((data) => {
