@@ -8,23 +8,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function loadCart() {
     fetch(`/api/cart`)
-        .then((response) => {
-            if (response.ok) {
+        .then(async (response) => {
+            if (response.status === 200) {
                 // 카드 가져오기 성공
                 return response.json();
             } else if (response.status === 401) {
-                response.json() 
-                    .then((data) => {
-                        alert(data.message);
-                        if (data.redirectUrl) {
-                            window.location.href = data.redirectUrl;
-                        }
-                    })
+                const data = await response.json();
+                alert(data.message);
+
+                if (data.redirectUrl) {
+                    window.location.href = data.redirectUrl;
+                }
+
+                throw new Error("Unauthorized");
+            } else {
+                throw new Error("Failed to fetch cart data");
             }
         })
         .then((cart) => {
             displayCart(cart);
         })
+        .catch((err) => {
+            console.error(err);
+        });
 }
 
 function displayCart(cartData) {
@@ -58,27 +64,22 @@ function displayCart(cartData) {
         totalAmount += item.price * item.quantity;
 
         // 이벤트 리스터 등록
-        document.querySelectorAll(".increase-btn").forEach((button) => {
-            button.addEventListener("click", () => {
-                const productId = button.getAttribute("data-product-id");
-                updateQuantity(productId, 1);
-            })
-        });
+        row.querySelector(".increase-btn").addEventListener("click", (e) => {
+            const productId = e.target.getAttribute("data-product-id");
+            updateQuantity(productId, 1);
+        }, { once: true });
 
-        document.querySelectorAll(".decrease-btn").forEach((button) => {
-            button.addEventListener("click", () => {
-                const productId = button.getAttribute("data-product-id");
-                updateQuantity(productId, -1);
-            })
-        });
+        row.querySelector(".decrease-btn").addEventListener("click", (e) => {
+            const productId = e.target.getAttribute("data-product-id");
+            updateQuantity(productId, -1);
+        }, { once: true });
 
-        document.querySelectorAll(".remove-btn").forEach((button) => {
-            button.addEventListener("click", () => {
-                const productId = button.getAttribute("data-product-id");
-                removeFromCart(productId);
-            })
-        });
-    })
+        row.querySelector(".remove-btn").addEventListener("click", (e) => {
+            const productId = e.target.getAttribute("data-product-id");
+            removeFromCart(productId);
+        }, { once: true });
+    });
+
     totalAmountSpan.textContent = totalAmount;
 }
 
@@ -97,7 +98,15 @@ function removeFromCart(productId) {
     fetch(`/api/cart/${productId}`, {
         method: "DELETE"
     })
-        .then((response) => response.json())
+        .then(async (response) => {
+            if (response.status === 200) {
+                return response.json();
+            } else if (response.status === 204) {
+                return {};
+            } else {
+                throw new Error("Failed to delete item from cart");
+            }
+        })
         .then((data) => {
             // 삭제 성공
             displayCart(data);

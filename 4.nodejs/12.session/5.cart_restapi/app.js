@@ -63,6 +63,7 @@ app.post("/api/login", (req, res) => {
 app.get("/api/logout", (req, res) => {
     req.session.destroy((err) => {
         if (err) {
+            console.error("세션 삭제 오류:", err);
             res.status(500).json({ message: "로그아웃 실패" });
         } else {
             res.json({ message: "로그아웃 성공", redirectUrl: "/" });
@@ -96,15 +97,15 @@ function checkLogin(req, res, next) {
 
 app.get("/api/cart", checkLogin, (req, res) => {
     const cart = req.session.cart || [];
-    res.json({ cart });
+    res.json({ cart, totalAmount: calculateTotalAmount(cart) });
 });
 
 app.post("/api/cart/:productId", checkLogin, (req, res) => {
-    const productId = parseInt(req.params.productId);
+    const productId = Number(req.params.productId);
     const product = products.find(p => p.id === productId);
 
     if (!product) {
-        return res.status(401).json({ message: "상품을 찾을 수 없습니다." });
+        return res.status(404).json({ message: "상품을 찾을 수 없습니다." });
     } 
 
     const cart = req.session.cart || [];
@@ -122,12 +123,16 @@ app.post("/api/cart/:productId", checkLogin, (req, res) => {
     }
 
     req.session.cart = cart;
-    res.json({ message: "장바구니 담기 성공", cart });
+    res.json({ message: "장바구니 담기 성공", cart, totalAmount: calculateTotalAmount(cart) });
 });
 
-app.put("/api/cart/:productId", (req, res) => {
+app.put("/api/cart/:productId", checkLogin, (req, res) => {
     const productId = parseInt(req.params.productId);
     const change = parseInt(req.query.change);
+
+    if (isNaN(productId) || isNaN(change)) {
+        return res.status(400).json({ message: "잘못된 요청입니다." });
+    }
 
     const cart = req.session.cart || [];
     const item = cart.find((i) => i.id === productId);
@@ -140,11 +145,15 @@ app.put("/api/cart/:productId", (req, res) => {
 
     req.session.cart = cart;
 
-    res.json({ message: "수량 변경 성공", cart });
+    res.json({ message: "수량 변경 성공", cart, totalAmount: calculateTotalAmount(cart) });
 });
 
 app.delete("/api/cart/:productId", checkLogin, (req, res) => {
     const productId = parseInt(req.params.productId);
+
+    if (isNaN(productId)) {
+        return res.status(400).json({ message: "잘못된 요청입니다." });
+    }
 
     let cart = req.session.cart || [];
     const itemIndex = cart.findIndex((i) => i.id === productId);
@@ -156,9 +165,13 @@ app.delete("/api/cart/:productId", checkLogin, (req, res) => {
     cart = cart.filter((_, index) => index !== itemIndex);
     req.session.cart = cart;
 
-    res.json({ message: "상품을 삭제했습니다.", cart });
+    res.json({ message: "상품을 삭제했습니다.", cart, totalAmount: calculateTotalAmount(cart) });
 });
 
+
+function calculateTotalAmount(cart) {
+    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+}
 // <-- REST-API
 
 app.listen(port, () => {
