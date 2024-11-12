@@ -7,3 +7,9 @@ package-lock.json
 # 개발하면서 생겨나는 각종 중간 산출물 제외
 *.txt
 *.csv
+*.
+
+# DB 파일 예외
+*.db
+*.sqlite
+*.sqlite3
