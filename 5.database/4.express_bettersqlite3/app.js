@@ -99,6 +99,40 @@ app.get("/:table", (req, res) => {
     }
 });
 
+app.get("/products", (req, res) => {
+    const { name } = req.query;
+
+    if (name) {
+        const query = db.prepare('SELECT * FROM products WHERE name LIKE ?');
+        const rows = query.get(`%${name}%`);
+        res.json(rows);
+    } else {
+        const query = db.prepare('SELECT * FROM products');
+        const rows = query.all();
+        res.json(rows);
+    }
+});
+
+app.get("/products/:productId", (req, res) => {
+    const productId = req.params.productId;
+    const query = db.prepare('SELECT * FROM products WHERE id = ?');
+    const row = query.get(productId);
+
+    if (!row) {
+        return res.send("상품 없음");
+    }
+
+    res.json(row);
+});
+
+// app.get("/products", (req, res) => {
+//     const { name } = req.query;
+
+//     const queryStr = db.prepare(`SELECT * FROM products WHERE name LIKE '%${name}%'`);
+//     const rows = db.prepare(queryStr).all();
+//     res.json(rows);
+// });
+
 app.listen(port, () => {
     console.log('Server Ready');
 });
