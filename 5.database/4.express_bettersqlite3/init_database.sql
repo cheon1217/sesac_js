@@ -20,9 +20,9 @@ CREATE TABLE IF NOT EXISTS products (
 
 -- 초기 상품 데이터 삽입
 INSERT INTO products (id, name, price) VALUES
-    (1, 'Product 1', 2000),
-    (2, 'Product 2', 3000),
-    (3, 'Product 3', 1500);
+    (1, '상품1', 2000),
+    (2, '상품2', 3000),
+    (3, '상품3', 1500);
 
 -- 도서 테이블 생성
 CREATE TABLE IF NOT EXISTS books (
@@ -34,6 +34,6 @@ CREATE TABLE IF NOT EXISTS books (
 
 -- 초기 도서 데이터 삽입
 INSERT INTO books (id, title, author, genre) VALUES
-    (1, 'Book 1', 'Author 1', 'Fiction'),
-    (2, 'Book 2', 'Author 2', 'Non-Fiction'),
-    (3, 'Book 3', 'Author 3', 'Mystery');
+    (1, 'Book1', '저자1', 'Fiction'),
+    (2, 'Book2', '저자2', 'Non-Fiction'),
+    (3, 'Book3', '저자3', 'Mystery');
