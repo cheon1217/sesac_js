@@ -87,30 +87,42 @@ app.delete("/users/:id", (req, res) => {
     }
 });
 
-app.get("/:table", (req, res) => {
-    const db_table = req.params.table;
+// app.get("/:table", (req, res) => {
+//     const db_table = req.params.table;
 
-    try {
-        const query = db.prepare(`SELECT * FROM ${db_table}`);
-        const rows = query.all();
-        res.json(rows);
-    } catch (err) {
-        res.send(`테이블이 없다! : ${db_table}`);
-    }
-});
+//     try {
+//         const query = db.prepare(`SELECT * FROM ${db_table}`);
+//         const rows = query.all();
+//         res.json(rows);
+//     } catch (err) {
+//         res.send(`테이블이 없다! : ${db_table}`);
+//     }
+// });
 
 app.get("/products", (req, res) => {
     const { name } = req.query;
 
     if (name) {
         const query = db.prepare('SELECT * FROM products WHERE name LIKE ?');
-        const rows = query.get(`%${name}%`);
+        const rows = query.all(`%${name}%`);
         res.json(rows);
     } else {
         const query = db.prepare('SELECT * FROM products');
         const rows = query.all();
         res.json(rows);
     }
+});
+
+// 매우매우 취약한 코드.. 실무에서 절대 하지 말것!
+// 브라우저에 /products_weak?name=' UNION SELECT * FROM users --
+app.get("/products_weak", (req, res) => {
+    const { name } = req.query;
+
+    console.log(name);
+
+    const queryStr = `SELECT * FROM products WHERE name LIKE '%${name}%'`;
+    const rows = db.prepare(queryStr).all();
+    res.json(rows);
 });
 
 app.get("/products/:productId", (req, res) => {
@@ -124,14 +136,6 @@ app.get("/products/:productId", (req, res) => {
 
     res.json(row);
 });
-
-// app.get("/products", (req, res) => {
-//     const { name } = req.query;
-
-//     const queryStr = db.prepare(`SELECT * FROM products WHERE name LIKE '%${name}%'`);
-//     const rows = db.prepare(queryStr).all();
-//     res.json(rows);
-// });
 
 app.listen(port, () => {
     console.log('Server Ready');
