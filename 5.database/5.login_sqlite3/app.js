@@ -28,12 +28,13 @@ app.get("/", (req, res) => {
 
 app.post("/login", (req, res) => {
     const { username, password } = req.body;
+    console.log(username, password);
     
     db.get('SELECT * FROM users WHERE username = ? AND password = ?', [username, password], (err, row) => {
         if (row) {
             // console.log(`사용자 조회: ${JSON.stringify(row)}`);
-            // res.send(`로그인 성공: ${row.username}`);
             req.session.user = row;
+            // res.send(`로그인 성공: ${row.username}`);
             res.redirect("/profile");
         } else {
             res.send("로그인 실패");
@@ -63,6 +64,7 @@ app.get("/profile-data", (req, res) => {
                 username: user.username,
                 email: row.email,
                 created_at: row.created_at,
+                role: user.role,
             });
         } else {
             res.status(404).json({ message: "정보를 찾을 수 없음" });
