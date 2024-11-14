@@ -7,15 +7,23 @@
 </head>
 <body>
     <h1>Search Artists in Chinook Database</h1>
-    <form action="/search" method="post">
+    <form action="/search" method="get">
         <input type="text" name="searchQuery" placeholder="Enter artist name">
+        <select name="searchList" required>
+            <option value="artist">Artist</option>
+            <option value="album">Album</option>
+            <option value="track">Track</option>
+            <option value="composer">Composer</option>
+            <option value="genre">Genre</option>
+            <option value="customer">Customer</option>
+        </select>
         <button type="submit">Search</button>
     </form>
 
     <h2>Search Results:</h2>
     <ul>
-        {% for artist in results %}
-            <li>{{ artist.Name }}</li>
+        {% for result in results %}
+            <li>{{ result.Name or result.Title or result.FirstName or result.Composer }}</li>
         {% endfor %}
     </ul>
 </body>
