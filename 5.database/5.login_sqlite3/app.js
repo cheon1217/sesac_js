@@ -1,6 +1,7 @@
 // 모듈 불러오기
 const express = require("express");
 const session = require("express-session");
+const SQLiteStore = require("connect-sqlite3")(session);
 const sqlite3 = require("sqlite3");
 const path = require("path");
 
@@ -13,7 +14,10 @@ const db = new sqlite3.Database("users.db");
 app.use(session({
     secret: "my-secret-1234",
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    store: new SQLiteStore({
+        db: "sessions.db", // 내가 원하는 db 이름 - 파일명
+    }),
 }));
 
 // 미들웨어 등록
