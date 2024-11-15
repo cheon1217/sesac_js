@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chinook Search</title>
+</head>
+<body>
+    <h1>Search Artists in Chinook Database</h1>
+    <form action="/search" method="get">
+        <input type="text" name="searchQuery" placeholder="Enter artist name">
+        <select name="searchList" required>
+            <option value="artist">Artist</option>
+            <option value="album">Album</option>
+            <option value="track">Track</option>
+            <option value="composer">Composer</option>
+            <option value="genre">Genre</option>
+            <option value="customer">Customer</option>
+        </select>
+        <button type="submit">Search</button>
+    </form>
+
+    <h2>Search Results:</h2>
+    <ul>
+        {% for result in results %}
+            <li>{{ result.Name or result.Title or result.FirstName or result.Composer }}</li>
+        {% endfor %}
+    </ul>
+
+    <div>
+        <form action="/search" method="get" style="display: inline;">
+            <input type="hidden" name="searchQuery" value="{{ searchQuery }}">
+            <input type="hidden" name="searchList" value="{{ searchList }}">
+
+            {% if currentPage > 1 %}
+                <input type="hidden" name="page" value="{{ currentPage - 1 }}">
+                <button type="submit">Prev</button>
+            {% else %}
+                <button type="submit" disabled>Prev</button>
+            {% endif %}
+        </form>
+
+        <span>페이지 {{ currentPage }} / {{ totalPages }}</span>
+
+        <form action="/search" method="get" style="display: inline;">
+            <input type="hidden" name="searchQuery" value="{{ searchQuery }}">
+            <input type="hidden" name="searchList" value="{{ searchList }}">
+
+            {% if currentPage < totalPages %}
+                <input type="hidden" name="page" value="{{ currentPage + 1 }}">
+                <button type="submit">Next</button>
+            {% else %}
+                <button type="submit" disabled>Next</button>
+            {% endif %}
+        </form>
+    </div>
+</body>
+</html>

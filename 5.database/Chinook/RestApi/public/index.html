@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chinook Search</title>
+    <title>Search</title>
 </head>
 <body>
     <h1>Search Artists in Chinook Database</h1>
-    <form action="/search" method="get">
-        <input type="text" name="searchQuery" placeholder="Enter artist name">
-        <select name="searchList" required>
+    <form id="searchForm">
+        <input type="text" id="searchQuery" placeholder="Enter artist name" required>
+        <select id="searchList" required>
             <option value="artist">Artist</option>
             <option value="album">Album</option>
             <option value="track">Track</option>
@@ -20,11 +20,11 @@
         <button type="submit">Search</button>
     </form>
 
-    <h2>Search Results:</h2>
-    <ul>
-        {% for result in results %}
-            <li>{{ result.Name or result.Title or result.FirstName or result.Composer }}</li>
-        {% endfor %}
-    </ul>
+    <h2>검색 결과</h2>
+    <ul id="resultList"></ul>
+
+    <div id="pagination"></div>
+
+    <script src="search.js"></script>
 </body>
 </html>
