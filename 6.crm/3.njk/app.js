@@ -17,7 +17,7 @@ app.use(express.static("public"));
 
 // 라우트
 app.get("/", (req, res) => {
-    const query = "SELECT * FROM users";
+    const query = db.prepare("SELECT * FROM users");
     const data = query.all();
 
     res.render("user.html", {data: data});
