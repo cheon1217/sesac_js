@@ -1,11 +1,25 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.search {
+    margin: 10px;
+}
+
+.search input {
+    height: 20px;
+}
+
 table {
     border-collapse: collapse;
     width: 100%;
+    text-align: center;
 }
 
 th, td {
     border: 1px solid #ddd;
     padding: 2px;
+    text-align: center;
 }
 
 th {
@@ -21,3 +35,21 @@ tr:hover td {
     background-color: #b3eda8;
     cursor: pointer;
 }
+
+.pagination a {
+    padding: 8px 16px;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    margin: 0 4px;
+}
+
+.pagination a.active {
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid #4caf50;
+}
+
+.pagination a:hover:not(.active) {
+    background-color: #ddd;
+}
+

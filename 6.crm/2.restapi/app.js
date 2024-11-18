@@ -17,17 +17,32 @@ app.get("/", (req, res) => {
 
 // 시스템 호출용 API 라우트
 app.get("/api/users", (req, res) => {
+
     const query = "SELECT * FROM users";
-    db.all(query, [], (err, rows) => {
+    db.all(query, (err, rows) => {
+        if (err) {
+            console.error("Error fetching user:", err);
+            return res.status(500).json({ message: "Internal server error" });
+        }
+
         res.json(rows);
     });
 });
+
 
 app.get("/api/users/:id", (req, res) => {
     const userId = req.params.id;
 
     const query = "SELECT * FROM users WHERE Id = ?";
     db.get(query, [userId], (err, rows) => {
+        if (err) {
+            console.error("Error fetching user:", err);
+            return res.status(500).json({ message: "Internal server error" });
+        }
+
+        if (!rows) {
+            return res.status(404).json({ message: "User not found" });
+        }
         res.json(rows);
     });
 });

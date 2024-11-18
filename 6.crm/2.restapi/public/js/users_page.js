@@ -2,28 +2,31 @@ const searchButton = document.getElementById("search-button");
 const searchNameInput = document.getElementById("search-name");
 
 let searchName = "";
+let currentPage = 1;
 
 searchButton.addEventListener("click", () => {
     searchName = searchNameInput.value;
-    fetchUsers();
+    fetchUsers(1);
 });
 
 searchNameInput.addEventListener("keyup", (e) => {
     if (e.key === "Enter") {
         searchName = searchNameInput.value;
-        fetchUsers();
+        fetchUsers(1);
     }
 });
 
-function fetchUsers() {
-    const queryString = `?name=${encodeURIComponent(searchName)}`;
+function fetchUsers(page) {
+    currentPage = page;
+    const queryString = `?page=${page}&name=${encodeURIComponent(searchName)}`;
 
     fetch(`/api/users${queryString}`)
         .then((response) => response.json())
         .then(data => {
             // console.log(data);
             // 랜더링 코드 작성
-            renderTable(data);
+            renderTable(data.data);
+            renderPagination(data.totalPages, currentPage);
         })
         .catch(err => {
             console.error("Error fetching users:", err);
@@ -71,4 +74,56 @@ function renderTable(data) {
     }
 }
 
-fetchUsers(); // 시작할 때는 그냥 빈값으로 검색, 즉 모든 사용자 다 출력
+function renderPagination(totalPages, currentPage) {
+    const pagination = document.getElementById("pagination");
+
+    pagination.innerHTML = "";
+
+    if (currentPage > 1) {
+        const prev = document.createElement("a");
+        prev.textContent = "« Previous";
+        prev.href = "#";
+        prev.addEventListener("click", (e) => {
+            e.preventDefault();
+            fetchUsers(currentPage - 1);
+        });
+        pagination.appendChild(prev);
+    }
+
+    for (let i = 1; i <= totalPages; i++) {
+        const pageLink = document.createElement("a");
+        pageLink.textContent = i;
+        pageLink.href = "#";
+        if (i === currentPage) {
+            pageLink.classList.add("active");
+        }
+        pageLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            fetchUsers(i);
+        });
+        pagination.appendChild(pageLink);
+    }
+
+    if (currentPage < totalPages) {
+        const next = document.createElement("a");
+        next.textContent = "Next »";
+        next.href = "#";
+        next.addEventListener("click", (e) => {
+            e.preventDefault();
+            fetchUsers(currentPage + 1);
+        });
+        pagination.appendChild(next);
+    }
+}
+
+function parseURLParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const page = parseInt(urlParams.get("page")) || 1;
+    const name = urlParams.get("name") || "";
+    searchNameInput.value = name;
+    searchName = name;
+    return { page, name };
+}
+
+const { page } = parseURLParams();
+fetchUsers(page); // 시작할 때는 그냥 빈값으로 검색, 즉 모든 사용자 다 출력

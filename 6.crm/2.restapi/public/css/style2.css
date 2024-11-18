@@ -1,0 +1,39 @@
+/* 사용자 상세 페이지 */
+#user-detail-container {
+    width: 80%;
+    margin: 20px auto;
+    text-align: center;
+}
+
+.back-link {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    text-decoration: none;
+    color: #007bff;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+table th {
+    background-color: #ffa500;
+    color: white;
+}
+
+table tr:hover {
+    background-color: #f9f9f9;
+}
