@@ -81,7 +81,7 @@ function renderPagination(totalPages, currentPage) {
 
     if (currentPage > 1) {
         const prev = document.createElement("a");
-        prev.textContent = "« Previous";
+        prev.textContent = "«";
         prev.href = "#";
         prev.addEventListener("click", (e) => {
             e.preventDefault();
@@ -106,7 +106,7 @@ function renderPagination(totalPages, currentPage) {
 
     if (currentPage < totalPages) {
         const next = document.createElement("a");
-        next.textContent = "Next »";
+        next.textContent = "»";
         next.href = "#";
         next.addEventListener("click", (e) => {
             e.preventDefault();
