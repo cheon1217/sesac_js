@@ -1,33 +1,31 @@
 const express = require("express");
 const morgan = require("morgan");
 const nunjcuks = require("nunjucks");
-const sqlite3 = require("sqlite3");
 
 const app = express();
 const port = 3000;
-const db = new sqlite3.Database("user-sample.db");
 
 app.use(morgan("dev"));
-app.use(express.static("public"));
+app.use("/static", express.static("public"));
 
 app.set("view engine", "html");
 
-nunjcuks.configure("views", {
+nunjcuks.configure("app/views", {
     autoescape: true,
     express: app,
 });
 
-app.get("/users", async (req, res) => {
-    try {
-        const currentPage = req.query.page || 1;
-        const name = req.query.name || "";
-        const gender = req.query.gender || null;
+const userRoutes = require("./app/routes/user");
+const orderRoutes = require("./app/routes/order");
+const orderitemRoutes = require("./app/routes/orderitem");
+const itemRoutes = require("./app/routes/item");
+const storeRoutes = require("./app/routes/store");
 
-        res.render("users");
-    } catch (err) {
-
-    }
-});
+app.use("/users", userRoutes);
+app.use("/orders", orderRoutes);
+app.use("/orderitems", orderitemRoutes);
+app.use("/items", itemRoutes);
+app.use("/stores", storeRoutes);
 
 app.get("/", (req, res) => {
     res.redirect("/users");
