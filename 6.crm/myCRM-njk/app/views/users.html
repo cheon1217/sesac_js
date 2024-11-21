@@ -32,11 +32,7 @@
             <tbody>
             {% for user in pagination.items %}
                 <tr id="{{ user.Id }}" class="table-light">
-                    <td scope="row">
-                        <a href="/users/{{ user.Id }}">
-                            {{ user.Id }}
-                        </a>
-                    </td>
+                    <td><a href="/users/{{ user.Id }}">{{ user.Id }}</a></td>
                     <td>{{ user.Name }}</td>
                     <td>{{ user.Gender }}</td>
                     <td>{{ user.Age }}</td>

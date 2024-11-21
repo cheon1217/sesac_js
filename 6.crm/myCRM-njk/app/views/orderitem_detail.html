@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="cell-container" style="overflow: auto; max-height: 80vh;">
+        <div class="section-header">
+            상품 주문 정보
+        </div>
+        <div class="table-responsive">
+            <table class="table" id="orderitem">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Order ID</th>
+                        <th scope="col">Item ID</th>
+                        <th scope="col">Item Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for orderitem in orderitems %}
+                    <tr id="{{ orderitem.Id }}">
+                        <td>{{ orderitem.Id }}</td>
+                        <td><a href="/orders/{{ orderitem.OrderId }}">{{ orderItem.OrderId }}</a></td>
+                        <td><a href="/items/{{ orderitem.ItemId }}">{{ orderItem.ItemId }}</a></td>
+                        <td>{{ orderitem.Item_name }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
