@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Order } = require("../database/model");
+const { Order } = require("../database");
 
 router.get("/", async (req, res) => {
     try {
@@ -27,6 +27,25 @@ router.get("/", async (req, res) => {
 
     } catch (err) {
         console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+router.get("/:order_id", async (req, res) => {
+    try {
+        const orderId = req.params.order_id;
+
+        const orderModel = new Order();
+
+        const orders = await orderModel.executeQuery(`
+            SELECT * FROM orders WHERE id = ?
+        `, [orderId]);
+
+        orderModel.close();
+
+        res.render("order_detail", { orders });
+    } catch (error) {
+        console.error(error);
         res.status(500).send("Internal Server Error");
     }
 });

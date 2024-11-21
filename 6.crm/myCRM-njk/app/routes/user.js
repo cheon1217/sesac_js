@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { User } = require("../database/model");
+const { User } = require("../database");
 
 router.get("/", async (req, res) => {
     try {
@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
         let genderQuery = "";
 
         if (name) {
-            nameQuery += ` AND name LIKE '%${name}%'`;
+            nameQuery += ` AND name LIKE '${name}%'`;
             query += nameQuery;
             countQuery += nameQuery;
         }
@@ -61,11 +61,13 @@ router.get("/:user_id", async (req, res) => {
         const user = new User();
 
         const result = await user.executeQuery(query, [user_id]);
-        console.log(result);
+        // console.log(result);
+        const orderQuery = `SELECT * FROM orders WHERE userid = ?`;
+        const orders = await user.executeQuery(orderQuery, [user_id]);
 
         if (result.length > 0) {
             const user_data = result[0];
-            res.render("user_detail", { user: user_data });
+            res.render("user_detail", { user: user_data, orders: orders });
         } else {
             res.redirect("/users");
         }
