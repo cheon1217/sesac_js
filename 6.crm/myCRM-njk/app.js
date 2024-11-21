@@ -6,6 +6,7 @@ const app = express();
 const port = 3000;
 
 app.use(morgan("dev"));
+app.use(express.urlencoded({ extended: true }));
 app.use("/static", express.static("public"));
 
 app.set("view engine", "html");

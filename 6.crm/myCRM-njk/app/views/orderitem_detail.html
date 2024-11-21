@@ -19,9 +19,9 @@
                     {% for orderitem in orderitems %}
                     <tr id="{{ orderitem.Id }}">
                         <td>{{ orderitem.Id }}</td>
-                        <td><a href="/orders/{{ orderitem.OrderId }}">{{ orderItem.OrderId }}</a></td>
-                        <td><a href="/items/{{ orderitem.ItemId }}">{{ orderItem.ItemId }}</a></td>
-                        <td>{{ orderitem.Item_name }}</td>
+                        <td><a href="/orders/{{ orderitem.OrderId }}">{{ orderitem.OrderId }}</a></td>
+                        <td><a href="/items/{{ orderitem.ItemId }}">{{ orderitem.ItemId }}</a></td>
+                        <td>{{ orderitem.item_name }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
