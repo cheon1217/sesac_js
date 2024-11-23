@@ -45,19 +45,19 @@ router.get("/:store_id", async (req, res) => {
 
         const revMonth = req.query.rev_month;
         let query = 
-            'SELECT substr(orders.orderat, 1, 7) as month, ' +
-            'SUM(items.unitprice) as revenue, ' +
-            'COUNT(*) as count ' +
+            'SELECT substr(orders.orderAt, 1, 7) AS month, ' +
+            'SUM(items.unitPrice) AS revenue, ' +
+            'COUNT(*) AS count ' +
             'FROM order_items ' + 
-            'JOIN items ON order_items.itemid = items.id ' +
-            'JOIN orders ON order_items.orderid = orders.id ' +
+            'JOIN items ON order_items.itemId = items.id ' +
+            'JOIN orders ON order_items.orderId = orders.id ' +
             `WHERE orders.storeid = ? `;
 
         if (revMonth) {
-            query += ` AND substr(orders.orderat, 1, 7) = '${revMonth}'`;
+            query += ` AND substr(orders.orderAt, 1, 7) = '${revMonth}'`;
         }
 
-        query += `GROUP BY substr(orders.orderat, 1, 7) ORDER BY substr(orders.orderat, 1, 7)`;
+        query += `GROUP BY substr(orders.orderAt, 1, 7) ORDER BY substr(orders.orderAt, 1, 7)`;
 
         const revenues = await store.executeQuery(query, [ storeId ]);
 

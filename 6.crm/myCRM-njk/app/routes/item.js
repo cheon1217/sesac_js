@@ -37,12 +37,12 @@ router.get("/:item_id", async (req, res) => {
         const item = await new Item().executeQuery(`SELECT * FROM items WHERE id = ?`, [itemId]);
 
         const revenues = await new OrderItem().executeQuery(`
-            SELECT strftime('%Y-%m', orders.orderat) as month,
-                   SUM(items.unitprice) as total_revenue,
-                   COUNT(order_items.itemid) as item_count
+            SELECT strftime('%Y-%m', orders.orderAt) as month,
+                   SUM(items.unitPrice) as total_revenue,
+                   COUNT(order_items.itemId) as item_count
             FROM order_items
-            JOIN items ON order_items.itemid = items.id
-            JOIN orders ON order_items.orderid = orders.id
+            JOIN items ON order_items.itemId = items.id
+            JOIN orders ON order_items.orderId = orders.id
             WHERE items.id = ?
             GROUP BY month
             ORDER BY month
