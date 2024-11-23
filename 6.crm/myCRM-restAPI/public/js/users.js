@@ -1,36 +1,31 @@
-const searchButton = document.getElementById("search-button");
-const searchNameInput = document.getElementById("search-name");
+const searchForm = document.getElementById("form");
+searchForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const searchNameInput = document.getElementById("search-name");
+    const gender = document.getElementById("gender").value;
 
-let searchName = "";
-let currentPage = 1;
+    fetchUsers(searchName, gender);
+})
 
-searchButton.addEventListener("click", () => {
-    searchName = searchNameInput.value;
-    fetchUsers(1);
-});
-
-searchNameInput.addEventListener("keyup", (e) => {
-    if (e.key === "Enter") {
-        searchName = searchNameInput.value;
-        fetchUsers(1);
+async function fetchUsers(searchName, gender) {
+    try {
+        const response = await fetch(`/api/users/?name=${searchName}&gender=${gender}`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "Application/json" },
+                body: JSON.stringify({
+                    name: searchName,
+                    gender: gender,
+                }),
+            }
+        );
+        const data = await response.json();
+        console.log("유저 정보: ", data);
+        renderTable(data.data);
+        renderPagination();
+    } catch (err) {
+        console.error(err);
     }
-});
-
-function fetchUsers(page) {
-    currentPage = page;
-    const queryString = `?page=${page}&name=${encodeURIComponent(searchName)}`;
-
-    fetch(`/api/users${queryString}`)
-        .then((response) => response.json())
-        .then(data => {
-            // console.log(data);
-            // 랜더링 코드 작성
-            renderTable(data.data);
-            renderPagination(data.totalPages, currentPage);
-        })
-        .catch(err => {
-            console.error("Error fetching users:", err);
-        });
 }
 
 function renderTable(data) {

@@ -14,9 +14,17 @@
         <a href="/stores">Stores</a>
     </nav>
     <h1>Users</h1>
-    <div class="search">
-        <input type="text" id="search-name" placeholder="사용자 이름 검색">
-        <button id="search-button">search</button>
+    <div id="search">
+        <form id="form">
+            <label for="name"></label>
+            <input type="text" id="search-name" name="name">
+            <select name="gender" id="gender">
+                <option value="All">All</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+            <button type="submit">검색</button>
+        </form>
     </div>
     <div class="container">
         <table>

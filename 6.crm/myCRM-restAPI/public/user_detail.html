@@ -4,8 +4,35 @@
     <title>User Detail</title>
 </head>
 <body>
-    <h1>상세 유저 페이지</h1>
-    <div id="user-detail-container"></div>
+    <nav>
+        <a href="/users">Users</a>
+        <a href="/orders">Orders</a>
+        <a href="/orderitems">Order Items</a>
+        <a href="/items">Items</a>
+        <a href="/stores">Stores</a>
+    </nav>
+    <section>
+        <h4>고객 정보</h4>
+        <table>
+            <thead id="table-header"></thead>
+            <tbody id="table-body"></tbody>
+        </table>
+    </section>
+    <section>
+        <h4>주문 정보</h4>
+        <table>
+            <thead id="order-header"></thead>
+            <tbody id="order-body">
+                <tr>
+                    <td><a href="/user_detail/id/month">value</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    <section>
+        <h4>자주 방문한 매장 top 5</h4>
+        <ul id="visitList"></ul>
+    </section>
     <a href="/" class="back-link">목록으로 돌아가기</a>
     <script src="/js/user_detail.js"></script>
 </body>
