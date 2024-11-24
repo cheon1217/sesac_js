@@ -1,10 +1,10 @@
 const searchForm = document.getElementById("form");
 searchForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const searchNameInput = document.getElementById("search-name");
+    const searchNameInput = document.getElementById("search-name").value;
     const gender = document.getElementById("gender").value;
 
-    fetchUsers(searchName, gender);
+    fetchUsers(searchNameInput, gender);
 })
 
 async function fetchUsers(searchName, gender) {
@@ -15,14 +15,28 @@ async function fetchUsers(searchName, gender) {
                 headers: { "Content-Type": "Application/json" },
                 body: JSON.stringify({
                     name: searchName,
-                    gender: gender,
+                    gender,
                 }),
             }
         );
         const data = await response.json();
         console.log("유저 정보: ", data);
         renderTable(data.data);
-        renderPagination();
+        renderPagination(data.total, data.page, data.name, data.gender);
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+async function fetchUsers(page) {
+    try {
+        const params = new window.URLSearchParams(window.location.search);
+        const name = params.get("name") || "";
+        const gender = params.get("gender") || "";
+        const response = await fetch(`/api/users/${page}?name=${name}&gender=${gender}`);
+        const data = await response.json();
+        renderTable(data.data);
+        renderPagination(data.total, data.page, data.name, data.gender);
     } catch (err) {
         console.error(err);
     }
@@ -41,7 +55,7 @@ function renderTable(data) {
         const headerRow = document.createElement("tr");
         
         fields.forEach(f => {
-            if (f !== "Id" && f !== "Address") {
+            if (f !== "Address") {
                 const th = document.createElement("th");
                 th.textContent = f;
                 headerRow.appendChild(th);
@@ -58,7 +72,7 @@ function renderTable(data) {
             });
         
             for (const [key, value] of Object.entries(row)) {
-                if (key !== "Id" && key !== "Address") {
+                if (key !== "Address") {
                     const td = document.createElement("td");
                     td.textContent = value;
                     bodyRow.appendChild(td);
@@ -69,56 +83,27 @@ function renderTable(data) {
     }
 }
 
-function renderPagination(totalPages, currentPage) {
-    const pagination = document.getElementById("pagination");
+function renderPagination(totalArr, currentPage, name, gender) {
+    const ul = document.getElementById("page-ul");
+    ul.innerHTML = "";
+    totalArr.forEach((page) => {
+        const li = document.createElement("li");
+        li.classList.add("page-li");
+        li.innerHTML = `<a href="/users/${page}">${page}</a>`;
+        ul.appendChild(li);
 
-    pagination.innerHTML = "";
-
-    if (currentPage > 1) {
-        const prev = document.createElement("a");
-        prev.textContent = "«";
-        prev.href = "#";
-        prev.addEventListener("click", (e) => {
-            e.preventDefault();
-            fetchUsers(currentPage - 1);
-        });
-        pagination.appendChild(prev);
-    }
-
-    for (let i = 1; i <= totalPages; i++) {
-        const pageLink = document.createElement("a");
-        pageLink.textContent = i;
-        pageLink.href = "#";
-        if (i === currentPage) {
-            pageLink.classList.add("active");
+        if (currentPage === page) {
+            li.classList.add("active");
         }
-        pageLink.addEventListener("click", (e) => {
-            e.preventDefault();
-            fetchUsers(i);
-        });
-        pagination.appendChild(pageLink);
-    }
-
-    if (currentPage < totalPages) {
-        const next = document.createElement("a");
-        next.textContent = "»";
-        next.href = "#";
-        next.addEventListener("click", (e) => {
-            e.preventDefault();
-            fetchUsers(currentPage + 1);
-        });
-        pagination.appendChild(next);
-    }
+        if (page === "...") {
+            li.classList.add("disabled");
+            const link = li.querySelector("a");
+            link.removeAttribute("href");
+            link.style.pointerEvents = "none";
+        }
+    });
+    
 }
 
-function parseURLParams() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const page = parseInt(urlParams.get("page")) || 1;
-    const name = urlParams.get("name") || "";
-    searchNameInput.value = name;
-    searchName = name;
-    return { page, name };
-}
-
-const { page } = parseURLParams();
+const page = window.location.pathname.split("/").pop() || 1;
 fetchUsers(page); // 시작할 때는 그냥 빈값으로 검색, 즉 모든 사용자 다 출력
