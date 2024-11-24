@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CRM</title>
+</head>
+<body>
+    <nav>
+        <ul>
+          <li><a href="/">User</a></li>
+          <li><a href="/orders">Order</a></li>
+          <li><a href="/orderItems">OrderItem</a></li>
+          <li><a href="/items">Item</a></li>
+          <li><a href="/stores">Store</a></li>
+        </ul>
+      </nav>
+  
+      <div>
+        <label>Name:</label>
+        <input type="text" id="inputName" />
+        <label>Gender:</label>
+        <select name="gender" id="gender">
+          <option value="">무관</option>
+          <option value="Female">female</option>
+          <option value="Male">male</option>
+        </select>
+        <button id="submit">Submit</button>
+      </div>
+  
+      <div id="result">
+        <div>
+          <table>
+            <thead id="table-header"></thead>
+            <tbody id="table-body"></tbody>
+          </table>
+        </div>
+      </div>
+  
+      <div id="pagination"></div>
+      <script src="/js/users.js"></script>
+</body>
+</html>
