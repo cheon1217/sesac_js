@@ -421,7 +421,7 @@ app.get("/api/stores/users/:storeId", (req, res) => {
         JOIN users ON orders.UserId = users.Id
         WHERE stores.Id = ?
         GROUP BY orders.UserId
-        ORDER BY frequency DESC, users.Id
+        ORDER BY frequency DESC
         LIMIT 10
     `;
 
@@ -440,7 +440,7 @@ app.get("/api/stores/users/detail/:storeId", (req, res) => {
         JOIN users ON orders.UserId = users.Id
         WHERE stores.Id = ? AND orders.OrderAt LIKE ?
         GROUP BY users.Id
-        ORDER BY frequency DESC, users.Id
+        ORDER BY frequency DESC
         LIMIT 10
     `;
 

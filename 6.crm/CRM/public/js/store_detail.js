@@ -77,7 +77,7 @@ async function fetchSales(storeId) {
 
                     updateMonthlySalesTable(storeId, value);
 
-                    updatePatronsTable(storeId, value);
+                    updateRegularTable(storeId, value);
                 });
                 const td = document.createElement("td");
                 td.appendChild(link);
