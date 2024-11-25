@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas {
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="mycanvas" width="400" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById("mycanvas");
+        const context = canvas.getContext("2d"); // 2D 그래픽 그리기 위한 컨텍스트를 얻기
+
+        // 팩맨 그리기
+        context.fillStyle = "yellow";
+        context.beginPath();
+        context.moveTo(300, 100);
+        const startAngle = 0.2 * Math.PI;
+        const endAngle = 1.8 * Math.PI;
+        context.arc(200, 100, 50, startAngle, endAngle);
+        context.lineTo(300, 100);
+        context.fill();
+        context.closePath();
+
+        // 얼굴 그리기
+        context.beginPath();
+        context.arc(75, 75, 50, 0, Math.PI*2); // 얼굴
+        context.moveTo(110, 75);
+        context.arc(75, 75, 35, 0, Math.PI); // 입
+        context.moveTo(65, 65);
+        context.arc(60, 65, 5, 0, Math.PI*2); // 왼쪽눈
+        context.moveTo(95, 65);
+        context.arc(90, 65, 5, 0, Math.PI*2); // 오른쪽 눈
+        context.stroke();
+        context.closePath();
+
+        // 텍스트 쓰기
+        context.font = "30px Arial"; 
+        context.fillStyle = "#0095DD";
+        context.fillText("Hello, Canvas!", 50, 100);
+
+        context.font = "italic 40px Times New Roman"; 
+        context.fillStyle = "purple";
+        context.fillText("Hello, Canvas!", 50, 160);
+
+        context.font = "bold 40px Verdana"; 
+        context.fillStyle = "green";
+        context.fillText("Hello, Canvas!", 50, 40);
+
+        function drawText(font, style, text, x, y) {
+            context.font = font;
+            context.fillStyle = style;
+            context.fillText(text, x, y);
+        }
+
+        drawText("italic bold 30px Impact", "pink", "Pink color 글자", 50, 200);
+        drawText("20px Consolas", "lightblue", "function name() {}", 50, 240);
+        drawText("25px Arial", "yellow", "Yello text", 50, 280);
+        drawText("30px Santos", "gray", "Gray color", 50, 320);
+
+        const gradient = context.createLinearGradiendt(0, 0, canvas.witdh, 0);
+        gradient.addColorStop(0, "red");
+        gradient.addColorStop(1, "blue");
+        context.fillStyle = gradient;
+        context.fillRect(0, 0, canvas.witdh, canvas.height);
+    </script>
+</body>
+</html>
