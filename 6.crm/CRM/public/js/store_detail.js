@@ -82,9 +82,13 @@ async function fetchSales(storeId) {
                 const td = document.createElement("td");
                 td.appendChild(link);
                 bodyRow.appendChild(td);
+            } else if (key === "revenue") {
+                const td = document.createElement("td");
+                td.textContent = `${value}원`;
+                bodyRow.appendChild(td);
             } else {
                 const td = document.createElement("td");
-                td.textContent = value;
+                td.textContent = `${value}개`;
                 bodyRow.appendChild(td);
             }
         }

@@ -72,15 +72,15 @@ app.get("/api/users", (req, res) => {
                 selectQuery = `SELECT * FROM users WHERE name LIKE ? LIMIT ? OFFSET ?`;
                 if (gender) {
                     selectQuery = `SELECT * FROM users WHERE name LIKE ? AND gender = ? LIMIT ? OFFSET ?`;
-                    pageParams.push(`%${name}%`, gender);
+                    pageParams.unshift(`%${name}%`, gender);
                 } else {
-                    pageParams.push(`%${name}%`);
+                    pageParams.unshift(`%${name}%`);
                 }
             } else {
                 selectQuery = `SELECT * FROM users LIMIT ? OFFSET ?`;
                 if (gender) {
                     selectQuery = `SELECT * FROM users WHERE gender = ? LIMIT ? OFFSET ?`;
-                    pageParams.push(gender);
+                    pageParams.unshift(gender);
                 }
             }
 
@@ -319,7 +319,7 @@ app.get("/api/items/:itemId", (req, res) => {
 app.get("/api/items/month/:itemId", (req, res) => {
     const itemId = req.params.itemId;
     const selectQry = `
-        SELECT STRFTIME('%Y-%m', orders.OrderAt) AS Month, SUM(items.UnitPrice) AS 'TOTAL Revenue', COUNT(*) AS 'Item Count'
+        SELECT STRFTIME('%Y-%m', orders.OrderAt) AS Month, SUM(items.UnitPrice) AS 'Revenue', COUNT(*) AS 'Count'
         FROM items
         JOIN order_items ON items.Id = order_items.ItemId
         JOIN orders ON order_items.OrderId = orders.Id
