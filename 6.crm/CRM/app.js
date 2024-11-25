@@ -1,12 +1,14 @@
 require("dotenv").config();
 const express = require("express");
 const sqlite3 = require("sqlite3").verbose();
+const morgan = require("morgan");
 const path = require("path");
 
 const db = new sqlite3.Database("user-sample.db");
 const app = express();
 const port = 3000;
 
+app.use(morgan("dev"));
 app.use(express.static("public"));
 app.use(myLogger);
 
@@ -43,8 +45,8 @@ app.get("/api/users", (req, res) => {
     const queryParams = [];
 
     if (name) {
-        countSql = `SELECT COUNT(*) AS count FROM users WHERE name = ?`;
-        queryParams.push(name);
+        countSql = `SELECT COUNT(*) AS count FROM users WHERE name LIKE ?`;
+        queryParams.push(`%${name}%`);
         if (gender) {
             countSql += ` AND gender = ?`;
             queryParams.push(gender);
@@ -68,12 +70,12 @@ app.get("/api/users", (req, res) => {
             const pageParams = [itemsPerPage, offset];
 
             if (name) {
-                selectQuery = `SELECT * FROM users WHERE name = ? LIMIT ? OFFSET ?`;
+                selectQuery = `SELECT * FROM users WHERE name LIKE ? LIMIT ? OFFSET ?`;
                 if (gender) {
-                    selectQuery = `SELECT * FROM users WHERE name = ? AND gender = ? LIMIT ? OFFSET ?`;
-                    pageParams.unshift(name, gender);
+                    selectQuery = `SELECT * FROM users WHERE name LIKE ? AND gender = ? LIMIT ? OFFSET ?`;
+                    pageParams.unshift(`%${name}%`, gender);
                 } else {
-                    pageParams.unshift(name);
+                    pageParams.unshift(`%${name}%`);
                 }
             } else {
                 selectQuery = `SELECT * FROM users LIMIT ? OFFSET ?`;
