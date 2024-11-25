@@ -9,12 +9,6 @@ const port = 3000;
 
 app.use(morgan("dev"));
 app.use(express.static("public"));
-app.use(myLogger);
-
-function myLogger(req, res, next) {
-    console.log(`LOG: ${req.method} ${req.url}`);
-    next();
-}
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "users.html"));
@@ -72,7 +66,7 @@ app.get("/api/users", (req, res) => {
                 selectQuery = `SELECT * FROM users WHERE name LIKE ? LIMIT ? OFFSET ?`;
                 if (gender) {
                     selectQuery = `SELECT * FROM users WHERE name LIKE ? AND gender = ? LIMIT ? OFFSET ?`;
-                    pageParams.unshift(`%${name}%`, gender);
+                    pageParams.unshift(`%${name}%`, gender); // 값이 있는 배열 안에 추가하기 떄문에 unshift함수 사용
                 } else {
                     pageParams.unshift(`%${name}%`);
                 }
@@ -407,13 +401,13 @@ app.get("/api/stores/month/detail/:storeId", (req, res) => {
         FROM stores
         JOIN orders ON stores.Id = orders.StoreId
         JOIN order_items ON orders.Id = order_items.OrderId
-        JOIN items ON order_items.Item.Id = items.Id
+        JOIN items ON order_items.ItemId = items.Id
         WHERE stores.Id = ? AND orders.OrderAt LIKE ?
         GROUP BY STRFTIME('%Y-%m-%d', orders.OrderAt)
         ORDER BY orders.OrderAt
     `;
 
-    db.all(selectQry, storeId, date, (err, rows) => {
+    db.all(selectQry, storeId, `${date}`, (err, rows) => {
         res.status(200).json(rows);
     });
 });
@@ -450,7 +444,7 @@ app.get("/api/stores/users/detail/:storeId", (req, res) => {
         LIMIT 10
     `;
 
-    db.all(selectQry, storeId, date, (err, rows) => {
+    db.all(selectQry, storeId, `${date}`, (err, rows) => {
         res.status(200).json(rows);
     });
 });

@@ -141,10 +141,20 @@ async function updateMonthlySalesTable(storeId, value) {
     data.forEach((row) => {
         const tableRow = document.createElement("tr");
 
-        for (const [__, value] of Object.entries(row)) {
-            const td = document.createElement("td");
-            td.textContent = value;
-            tableRow.appendChild(td);   
+        for (const [key, value] of Object.entries(row)) {
+            if (key === "revenue") {
+                const td = document.createElement("td");
+                td.textContent = `${value}원`;
+                tableRow.appendChild(td);   
+            } else if (key === "count") {
+                const td = document.createElement("td");
+                td.textContent = `${value}개`;
+                tableRow.appendChild(td); 
+            } else {
+                const td = document.createElement("td");
+                td.textContent = value;
+                tableRow.appendChild(td);   
+            }
         }
         tableBody.appendChild(tableRow);
     });
