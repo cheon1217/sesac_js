@@ -2,13 +2,13 @@ const storeId = window.location.pathname.split("/").pop();
 
 fetchStore(storeId);
 fetchSales(storeId);
-fetchPatrons(storeId);
+fetchRegular(storeId);
 
 const backButton = document.getElementById("back");
 backButton.addEventListener("click" , () => {
     fetchStore(storeId);
     fetchSales(storeId);
-    fetchPatrons(storeId);
+    fetchRegular(storeId);
 });
 
 async function fetchStore(storeId) {
@@ -96,12 +96,12 @@ async function fetchSales(storeId) {
     })
 }
 
-async function fetchPatrons(storeId) {
+async function fetchRegular(storeId) {
     const response = await fetch(`/api/stores/users/${storeId}`);
 
     const data = await response.json();
 
-    const tableHeader = document.querySelector("#patronsTable thead");
+    const tableHeader = document.querySelector("#regularTable thead");
     tableHeader.innerHTML = "";
 
     const fields = Object.keys(data[0]);
@@ -113,7 +113,7 @@ async function fetchPatrons(storeId) {
     });
     tableHeader.appendChild(headerRow);
 
-    const tableBody = document.querySelector("#patronsTable tbody");
+    const tableBody = document.querySelector("#regularTable tbody");
     tableBody.innerHTML = "";
 
     data.forEach((row) => {
@@ -160,11 +160,11 @@ async function updateMonthlySalesTable(storeId, value) {
     });
 }
 
-async function updatePatronsTable(storeId, value) {
+async function updateRegularTable(storeId, value) {
     const response = await fetch(`/api/stores/users/detail/${storeId}?date=${value}`);
     const data = await response.json();
 
-    const tableBody = document.querySelector("#patronsTable tbody");
+    const tableBody = document.querySelector("#regularTable tbody");
     tableBody.innerHTML = "";
 
     data.forEach((row) => {
