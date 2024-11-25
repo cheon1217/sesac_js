@@ -1,4 +1,3 @@
-require("dotenv").config();
 const express = require("express");
 const sqlite3 = require("sqlite3").verbose();
 const morgan = require("morgan");
@@ -73,15 +72,15 @@ app.get("/api/users", (req, res) => {
                 selectQuery = `SELECT * FROM users WHERE name LIKE ? LIMIT ? OFFSET ?`;
                 if (gender) {
                     selectQuery = `SELECT * FROM users WHERE name LIKE ? AND gender = ? LIMIT ? OFFSET ?`;
-                    pageParams.unshift(`%${name}%`, gender);
+                    pageParams.push(`%${name}%`, gender);
                 } else {
-                    pageParams.unshift(`%${name}%`);
+                    pageParams.push(`%${name}%`);
                 }
             } else {
                 selectQuery = `SELECT * FROM users LIMIT ? OFFSET ?`;
                 if (gender) {
                     selectQuery = `SELECT * FROM users WHERE gender = ? LIMIT ? OFFSET ?`;
-                    pageParams.unshift(gender);
+                    pageParams.push(gender);
                 }
             }
 
@@ -176,7 +175,6 @@ app.get("/api/orders", (req, res) => {
     const { page = 1 } = req.query;
     const itemsPerPage = 20;
     const offset = (page - 1) * itemsPerPage;
-    let countSql = 0;
 
     const countQuery = `SELECT COUNT(*) AS count FROM orders`;
 
@@ -225,7 +223,6 @@ app.get("/api/orderItems", (req, res) => {
     const { page = 1 } = req.query;
     const itemsPerPage = 20;
     const offset = (page - 1) * itemsPerPage;
-    let countSql = 0;
 
     const countQuery = `SELECT COUNT(*) AS count FROM order_items`;
 
@@ -275,7 +272,6 @@ app.get("/api/items", (req, res) => {
     const { page = 1 } = req.query;
     const itemsPerPage = 20;
     const offset = (page - 1) * itemsPerPage;
-    let countSql = 0;
 
     const countQuery = `SELECT COUNT(*) AS count FROM items`;
 
@@ -341,7 +337,6 @@ app.get("/api/stores", (req, res) => {
     const { page = 1 } = req.query;
     const itemsPerPage = 20;
     const offset = (page - 1) * itemsPerPage;
-    let countSql = 0;
 
     const countQuery = `SELECT COUNT(*) AS count FROM stores`;
 

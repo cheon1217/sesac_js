@@ -71,7 +71,6 @@ async function fetchSales(storeId) {
             if (key === "month") {
                 const link = document.createElement("a");
                 link.textContent = value;
-                // console.log(value);
 
                 link.addEventListener("click", (e) => {
                     e.preventDefault();
