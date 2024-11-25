@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>월간 매출액</h1>
+    <table>
+        <tr>
+            <th>년-월</th>
+            <th>해당 월 매출액</th>
+        </tr>
+        {% for row in rows %}
+        <tr>
+            <td>{{ row.YearMonth }}</td>
+            <td>{{ row.MonthlyRevenue }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <canvas id="revenueChart"></canvas>
+
+    <script> 
+        // 백엔드에서 넘겨주는 변수 받아오기 - 우리가 원하는 데이터는 어떤 형태인가??
+        // | safe 는 내가 BE에서 보낸 값을 신뢰하고 이스케이핑 처리하지 마라.. 내가 알아서 한다..
+        const labels = {{ labels | safe }};
+        const revenues = {{ revenues | safe }};
+
+        const ctx = document.getElementById('revenueChart').getContext("2d");
+
+        new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Monthly Revenue",
+                    data: revenues,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
