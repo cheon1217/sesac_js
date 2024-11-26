@@ -102,6 +102,7 @@
                                 stacked: true
                             },
                             y: {
+                                beginAtZero: true,
                                 stacked: true,
                                 title: {
                                     display: true,
@@ -112,36 +113,39 @@
                     }
                 })
 
+                const ageGroupColors = [
+                    'rgba(255, 99, 132, 0.7)', // 10대
+                    'rgba(54, 162, 235, 0.7)', // 20대
+                    'rgba(75, 192, 192, 0.7)', // 30대
+                    'rgba(153, 102, 255, 0.7)', // 40대
+                    'rgba(255, 206, 86, 0.7)'  // 50대
+                ];
+                const borderColors = [
+                    'rgba(255, 99, 132, 1)', 
+                    'rgba(54, 162, 235, 1)', 
+                    'rgba(75, 192, 192, 1)', 
+                    'rgba(153, 102, 255, 1)', 
+                    'rgba(255, 206, 86, 1)'
+                ];
+
                 const genderCtx = document.getElementById("genderChart").getContext("2d");
                 new Chart(genderCtx, {
-                    type: "pie",
+                    type: "doughnut",
                     data: {
                         labels: data.labels,
                         datasets: [
                             {
                                 label: 'Male',
                                 data: data.maleCount,
-                                backgroundColor: [
-                                    'rgba(255, 99, 132, 1)', 
-                                    'rgba(54, 162, 235, 1)', 
-                                    'rgba(75, 192, 192, 1)', 
-                                    'rgba(153, 102, 255, 1)', 
-                                    'rgba(255, 206, 86, 1)'
-                                ],
-                                hoverOffset: 4,
+                                backgroundColor: ageGroupColors,
+                                borderColor: borderColors,
                                 borderWidth: 1
                             }, 
                             {
                                 label: 'Female',
                                 data: data.femaleCount,
-                                backgroundColor: [
-                                    'rgba(255, 99, 132, 1)', 
-                                    'rgba(54, 162, 235, 1)', 
-                                    'rgba(75, 192, 192, 1)', 
-                                    'rgba(153, 102, 255, 1)', 
-                                    'rgba(255, 206, 86, 1)'
-                                ],
-                                hoverOffset: 4,
+                                backgroundColor: ageGroupColors.map(color => color.replace("0.7", "0.5")),
+                                borderColor: borderColors,
                                 borderWidth: 1
                             }
                         ]
@@ -153,7 +157,8 @@
                                 display: true,
                                 text: "Gender"
                             }
-                        }
+                        },
+                        cutout: "50%",
                     }
                 })
             });

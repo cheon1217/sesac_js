@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <canvas id="chart"></canvas>
+
+    <script>
+        fetch("revenue_data")
+            .then(response => response.json())
+            .then(data => {
+                const ctx = document.getElementById("chart").getContext("2d");
+        
+                new Chart(ctx, {
+                    type: "bar",
+                    data: {
+                        labels: data.labels,
+                        datasets: [
+                            {
+                                label: "Monthly Revenue",
+                                data: data.revenues,
+                                type: "line",
+                                borderColor: "rgba(31, 119, 180, 1)",
+                                backgroundColor: "rgba(31, 119, 180, 0.2)",
+                                borderWidth: 2,
+                                yAxisID: "y",
+                            },
+                            {
+                                label: "Item Count",
+                                data: data.counts,
+                                type: "bar",
+                                backgroundColor: "rgba(255, 127, 14, 0.7)",
+                                borderWidth: 1,
+                                yAxisID: "y2",
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Month'
+                                },
+                                ticks: {
+                                    autoSkip: false
+                                }
+                            },
+                            y: {
+                                type: 'linear',
+                                position: 'left',
+                                title: {
+                                    display: true,
+                                    text: '매출액'
+                                },
+                                beginAtZero: true
+                            },
+                            y2: {
+                                type: 'linear',
+                                position: 'right',
+                                title: {
+                                    display: true,
+                                    text: '개수'
+                                },
+                                grid: {
+                                    drawOnChartArea: false // y2 축의 그리드 제거
+                                },
+                                beginAtZero: true
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false
+                            },
+                            legend: {
+                                position: 'top'
+                            }
+                        }
+                    }
+                })
+            });
+    </script>
+</body>
+</html>

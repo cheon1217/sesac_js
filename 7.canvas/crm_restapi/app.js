@@ -80,6 +80,10 @@ app.get("/gender_dist_data", (req, res) => {
     });
 });
 
+// app.get("/revenue_data", (req, res) => {
+//     res.sendFile(path.join(__dirname, "public", "revenue2.html"));
+// });
+
 app.get("/revenue_data", (req, res) => {
     const db = new sqlite3.Database("user-sample.db", (err) => {
         if (err) {
