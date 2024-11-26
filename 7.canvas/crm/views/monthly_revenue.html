@@ -3,6 +3,38 @@
 <head>
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        table {
+            width: 50%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        td {
+            text-align: center;
+        }
+
+        #revenueChart {
+            display: block;
+            width: 200px;
+            height: auto;
+        }
+    </style>
 </head>
 <body>
     <h1>월간 매출액</h1>
@@ -20,6 +52,7 @@
     </table>
 
     <canvas id="revenueChart"></canvas>
+    <canvas id="revenueChartLine"></canvas>
 
     <script> 
         // 백엔드에서 넘겨주는 변수 받아오기 - 우리가 원하는 데이터는 어떤 형태인가??
@@ -31,6 +64,29 @@
 
         new Chart(ctx, {
             type: "bar",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Monthly Revenue",
+                    data: revenues,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const ctx2 = document.getElementById('revenueChartLine').getContext("2d");
+
+        new Chart(ctx2, {
+            type: "line",
             data: {
                 labels: labels,
                 datasets: [{

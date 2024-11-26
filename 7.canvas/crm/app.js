@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
     db.all(`
        SELECT 
             strftime('%Y-%m', "orders"."OrderAt") AS YearMonth,
-            SUM(items.UnitPrice) AS MonthlyRevenue
+            SUM(items.UnitPrice) AS MonthlyRevenue, COUNT(order_items.ItemId) AS count 
         FROM 
             "orders"
         JOIN 
@@ -42,7 +42,7 @@ app.get("/", (req, res) => {
         if (err) {
             console.error("실패!");
         } else {
-            // console.log(rows);
+            console.log(rows);
             // res.render("monthly_revenue", { rows });
             const labels = rows.map((row) => row.YearMonth);
             const revenues = rows.map((row) => row.MonthlyRevenue);
@@ -54,6 +54,15 @@ app.get("/", (req, res) => {
             });
         }
     });
+
+    // 데이터 베이스 연결 닫기
+    db.close((err) => {
+        if (err) {
+            console.error("DB 닫기 실패");
+        } else {
+            console.log("DB 닫기 성공");
+        }
+    })
 });
 
 app.listen(port, () => {
