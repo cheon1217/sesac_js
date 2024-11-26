@@ -31,7 +31,8 @@ app.get("/gender_dist_data", (req, res) => {
             Gender,
             COUNT(*) AS UserCount
         FROM users
-        GROUP BY AgeGroup, Gender;
+        GROUP BY AgeGroup, Gender
+        ORDER BY AgeGroup, Gender
     `, [], (err, rows) => {
         if (err) {
             console.error("실패!");
@@ -43,10 +44,34 @@ app.get("/gender_dist_data", (req, res) => {
             // maleCount: [100, 123, 128, 107, 29]
             // femaleCount: [101, 135, 126, 117, 33]
 
+            // const chartData = {
+            //     labels: ['10대', '20대', '30대', '40대', '50대'],
+            //     maleCount: [100, 123, 128, 107, 29],
+            //     femaleCount: [101, 135, 126, 117, 33],
+            // }
+
+            const ageGroups = {};
+
+            for (const row of rows) {
+                const ageGroup = row.AgeGroup;
+                const gender = row.Gender;
+                const count = row.UserCount;
+
+                if (!ageGroups[ageGroup]) {
+                    ageGroups[ageGroup] = { male: 0, female: 0 };
+                }
+
+                if (gender === "Male") {
+                    ageGroups[ageGroup].male = count;
+                } else if (gender === "Female") {
+                    ageGroups[ageGroup].female = count;
+                }
+            }
+
             const chartData = {
-                labels: ['10대', '20대', '30대', '40대', '50대'],
-                maleCount: [100, 123, 128, 107, 29],
-                femaleCount: [101, 135, 126, 117, 33],
+                labels: Object.keys(ageGroups),
+                maleCount: Object.values(ageGroups).map(group => group.male),
+                femaleCount: Object.values(ageGroups).map(group => group.female),
             }
             
             console.log(chartData);

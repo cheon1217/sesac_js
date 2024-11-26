@@ -13,6 +13,7 @@
     <h2>고객 성별 분포도</h2>
     <canvas id="ageChart"></canvas>
     <canvas id="ageChart2"></canvas>
+    <canvas id="genderChart"></canvas>
 
     <script>
         // 차트에 입력할 데이터를 백엔드에 요청한다.
@@ -106,6 +107,51 @@
                                     display: true,
                                     text: "Count"
                                 }
+                            }
+                        }
+                    }
+                })
+
+                const genderCtx = document.getElementById("genderChart").getContext("2d");
+                new Chart(genderCtx, {
+                    type: "pie",
+                    data: {
+                        labels: data.labels,
+                        datasets: [
+                            {
+                                label: 'Male',
+                                data: data.maleCount,
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 1)', 
+                                    'rgba(54, 162, 235, 1)', 
+                                    'rgba(75, 192, 192, 1)', 
+                                    'rgba(153, 102, 255, 1)', 
+                                    'rgba(255, 206, 86, 1)'
+                                ],
+                                hoverOffset: 4,
+                                borderWidth: 1
+                            }, 
+                            {
+                                label: 'Female',
+                                data: data.femaleCount,
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 1)', 
+                                    'rgba(54, 162, 235, 1)', 
+                                    'rgba(75, 192, 192, 1)', 
+                                    'rgba(153, 102, 255, 1)', 
+                                    'rgba(255, 206, 86, 1)'
+                                ],
+                                hoverOffset: 4,
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: "Gender"
                             }
                         }
                     }
