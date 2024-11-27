@@ -52,6 +52,16 @@
                     <input type="date" class="form-control">
                 </div>
             </div>
+            <div class="mb-3">
+                <label class="form-label">관심 분야(최소 1개, 최대 3개 선택)</label> <br>
+                <label><input type="checkbox" name="interest" value="관심 분야 1">관심 분야 1</label><br>
+                <label><input type="checkbox" name="interest" value="관심 분야 2">관심 분야 2</label><br>
+                <label><input type="checkbox" name="interest" value="관심 분야 3">관심 분야 3</label><br>
+                <label><input type="checkbox" name="interest" value="관심 분야 4">관심 분야 4</label><br>
+                <div class="invalid-feedback">
+                    최소 1개, 최대 4개까지 선택해야 합니다.
+                </div>
+            </div>
             <!-- 제출 -->
             <button type="submit" class="btn btn-primary">제출</button>
             <button type="reset" class="btn btn-secondary ms-2">초기화</button> <!-- margin start -->
