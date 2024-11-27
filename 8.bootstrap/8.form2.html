@@ -10,38 +10,46 @@
 <body>
     <div class="container my-4">
         <h2>회원가입</h2>
-        <form id="exampleForm">
+        <form id="exampleForm" validate>
             <!-- ID -->
             <div class="mb-3">
-                <label class="form-label">ID</label>
+                <label class="form-label">UserID</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="bi bi-person"></i></span>
-                    <input type="text" id="name" name="name" class="form-control" placeholder="아이디를 입력하세요">
+                    <input type="text" id="username" name="username" class="form-control" placeholder="닉네임을 입력하세요" required>
                 </div>
+                <div class="valid-feedback">Valid</div>
+                <div class="invalid-feedback">사용자 명은 3글자 이상 10글자 이하로 입력해야 합니다.</div>
             </div>
             <!-- 비밀번호 -->
             <div class="mb-3">
                 <label class="form-label">Password</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="비밀번호를 입력하세요">
+                    <input type="password" id="password" name="password" class="form-control" placeholder="비밀번호를 입력하세요" required>
                 </div>
+                <div class="valid-feedback">Valid</div>
+                <div class="invalid-feedback">비밀번호는 대소문자, 숫자 또는 특수문자 중 3가지 이상 조합하여 8자 이상 입력해야 합니다.</div>
             </div>
             <!-- 이름 -->
             <div class="mb-3">
                 <label class="form-label">Name</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="bi bi-card-text"></i></span>
-                    <input type="text" id="name" name="name" class="form-control" placeholder="이름을 입력하세요">
+                    <input type="text" id="name" name="name" class="form-control" placeholder="이름을 입력하세요" required>
                 </div>
+                <div class="valid-feedback">Valid</div>
+                <div class="invalid-feedback">이름은 3글자 이상 10글자 이하로 입력해야 합니다.</div>
             </div>
             <!-- 이메일 -->
             <div class="mb-3">
                 <label class="form-label">Email</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="bi bi-at"></i></span>
-                    <input type="email" id="email" name="email" class="form-control" placeholder="이메일 주소를 입력하세요">
+                    <input type="email" id="email" name="email" class="form-control" placeholder="이메일 주소를 입력하세요" required>
                 </div>
+                <div class="valid-feedback">Valid</div>
+                <div class="invalid-feedback">유효한 이메일 주소를 입력해야 합니다.</div>
             </div>
             <!-- 생년월일 -->
             <div class="mb-3">
@@ -66,6 +74,11 @@
         form.addEventListener("submit", (e) => {
             e.preventDefault();
 
+            if(!form.checkVisibility()) {
+                form.classList.add("was-validate");
+                return;
+            }
+
             const formData = new FormData(form);
             const name = formData.get("name");
             const email = formData.get("email");
@@ -80,6 +93,8 @@
                     <p><strong>Password:</strong>${password}</p>
                 </div>
             `;
+            form.reset();
+            form.classList.remove("was-validate");
         });
     </script>
 
