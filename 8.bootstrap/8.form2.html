@@ -28,6 +28,9 @@
                 <div class="input-group">
                     <span class="input-group-text"><i class="bi bi-lock"></i></span>
                     <input type="password" id="password" name="password" class="form-control" placeholder="비밀번호를 입력하세요" required>
+                    <div class="invalid-feedback">
+                        비밀번호는 대소문자, 숫자 또는 특수문자 중 3가지 이상 조합하여 8자 이상 입력해야 합니다.
+                    </div>
                 </div>
             </div>
             <!-- 이름 -->
@@ -39,14 +42,6 @@
                     <div class="invalid-feedback">
                         이름은 최소 1글자, 최대 10글자까지 입력 가능합니다.
                     </div>
-                </div>
-            </div>
-            <!-- 이메일 -->
-            <div class="mb-3">
-                <label class="form-label">Email</label>
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-at"></i></span>
-                    <input type="email" id="email" name="email" class="form-control" placeholder="이메일 주소를 입력하세요" required>
                 </div>
             </div>
             <!-- 생년월일 -->
@@ -69,8 +64,8 @@
         document.getElementById("username").addEventListener("blur", validateUsername);
         document.getElementById("password").addEventListener("blur", validatePassword);
         document.getElementById("name").addEventListener("blur", validateName);
-        document.getElementById("email").addEventListener("blur", validateEmail);
 
+        // Username
         function validateUsername() {
             const username = document.getElementById("username");
             if (username.value.length < 3 || username.value.length > 10) {
@@ -82,10 +77,34 @@
             }
         }
 
+        // Password
         function validatePassword() {
+            const password = document.getElementById("password");
+            const passwordValue = document.getElementById("password").value;
+            
+            const isValid = validate(passwordValue);
 
+            if (!isValid) {
+                password.classList.add("is-invalid");
+            } else {
+                password.classList.remove("is-invalid");
+                password.classList.add("is-valid");
+            }
+
+            function validate(passwordValue) {
+                const minLength = 8;
+                const upperCase = /[A-Z]/.test(passwordValue);
+                const lowerCase = /[a-z]/.test(passwordValue);
+                const number = /[0-9]/.test(passwordValue);
+                const specialChar = /[!@#$%^&*(),.?":{}|<>]/.test(passwordValue);
+                const validLength = passwordValue.length >= minLength;
+
+                return upperCase && lowerCase && number && specialChar && validLength;
+            }
         }
 
+
+        // Name
         function validateName() {
             const name = document.getElementById("name");
             if (name.value.length === 0 || name.value.length > 10) {
@@ -95,10 +114,6 @@
                 name.classList.add("is-valid");
             }
         }   
-
-        function validateEmail() {
-
-        }
     </script>
 
     <script>
