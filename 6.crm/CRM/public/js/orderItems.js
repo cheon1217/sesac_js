@@ -28,9 +28,9 @@ async function fetchItems(page) {
         for (const [key, value] of Object.entries(row)) {
             const td = document.createElement("td");
             if (key === "order_id") {
-                td.innerHTML = `<a href="/orders/${value}">${value}</a>`;
+                td.innerHTML = `<a href="/orders/${value}" style="color: rgb(61, 88, 3)">${value}</a>`;
             } else if (key === "item_id") {
-                td.innerHTML = `<a href="/items/${value}">${value}</a>`;
+                td.innerHTML = `<a href="/items/${value}" style="color: rgb(12, 115, 150)">${value}</a>`;
             } else {
                 td.textContent = value;
             }
