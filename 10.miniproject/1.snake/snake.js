@@ -38,7 +38,7 @@ function handleKeyPress(e) {
         return;
     }
 
-    // 버그해결 - 방향 전환을 위해 제한된 시간 내에 최대 두개의 키 입력을 버퍼링 처리
+    // 방향 전환을 위해 제한된 시간 내에 최대 두개의 키 입력을 버퍼링 처리
     if (directionBuffer.length >= 2) {
         console.log("key buffer full: ", directionBuffer);
         return;
@@ -119,7 +119,7 @@ function draw() {
 
 function drawScore() {
     ctx.fillStyle = "#000";
-    ctx.font = "20px Arial";
+    ctx.font = "12px Arial";
     ctx.fillText(`score: ${score}`, 10, 20); // 좌측 상단에 점수 표시
 }
 
@@ -222,5 +222,6 @@ function resetGame() {
     snake = [{ x: 0, y: 0} ]; // 초기 뱀 위치로 설정
     direction = "right"; // 초기 이동 방향으로 설정
     food = generateFood(); // 초기 음식 생성
+    score = 0; // 점수 초기화
     gameover = false; // 게임 오버 상태 초기화
 }
