@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     fetchUser("", "", 1);
+    genderChartGraph();
 
     document.getElementById("submit").addEventListener("click", (e) => {
         e.preventDefault();
@@ -95,4 +96,59 @@ function displayPagination(name, gender, currentPage, totalPage) {
         nextButton.onclick = () => fetchUser(name, gender, currentPage + 1);
     }
     pagination.appendChild(nextButton);
+}
+
+function genderChartGraph() {
+    fetch("/api/users/genderGraph")
+        .then(response => response.json())
+        .then(data => {
+            const ageGroupColors = [
+                'rgba(255, 99, 132, 0.7)', // 10대
+                'rgba(54, 162, 235, 0.7)', // 20대
+                'rgba(75, 192, 192, 0.7)', // 30대
+                'rgba(153, 102, 255, 0.7)', // 40대
+                'rgba(255, 206, 86, 0.7)'  // 50대
+            ];
+            const borderColors = [
+                'rgba(255, 99, 132, 1)', 
+                'rgba(54, 162, 235, 1)', 
+                'rgba(75, 192, 192, 1)', 
+                'rgba(153, 102, 255, 1)', 
+                'rgba(255, 206, 86, 1)'
+            ];
+        
+            const genderCtx = document.getElementById("genderChart").getContext("2d");
+            new Chart(genderCtx, {
+                type: "doughnut",
+                data: {
+                    labels: data.labels,
+                    datasets: [
+                        {
+                            label: 'Male',
+                            data: data.maleCount,
+                            backgroundColor: ageGroupColors,
+                            borderColor: borderColors,
+                            borderWidth: 1
+                        }, 
+                        {
+                            label: 'Female',
+                            data: data.femaleCount,
+                            backgroundColor: ageGroupColors.map(color => color.replace("0.7", "0.5")),
+                            borderColor: borderColors,
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: "Gender"
+                        }
+                    },
+                    cutout: "50%",
+                }
+            })
+        })
 }

@@ -90,6 +90,57 @@ app.get("/api/users", (req, res) => {
     });
 });
 
+app.get("/api/users/genderGraph", (req, res) => {
+    db.all(`
+        SELECT
+            CASE
+                WHEN Age BETWEEN 10 AND 19 THEN '10대'
+                WHEN Age BETWEEN 20 AND 29 THEN '20대'
+                WHEN Age BETWEEN 30 AND 39 THEN '30대'
+                WHEN Age BETWEEN 40 AND 49 THEN '40대'
+                WHEN Age BETWEEN 50 AND 59 THEN '50대'
+                WHEN Age >= 60 THEN '60대이상'
+            END AS AgeGroup,
+            Gender,
+            COUNT(*) AS UserCount
+        FROM users
+        GROUP BY AgeGroup, Gender
+        ORDER BY AgeGroup, Gender
+    `, [], (err, rows) => {
+        if (err) {
+            console.error("실패!");
+        } else {
+            console.log(rows);
+            const ageGroups = {};
+
+            for (const row of rows) {
+                const ageGroup = row.AgeGroup;
+                const gender = row.Gender;
+                const count = row.UserCount;
+
+                if (!ageGroups[ageGroup]) {
+                    ageGroups[ageGroup] = { male: 0, female: 0 };
+                }
+
+                if (gender === "Male") {
+                    ageGroups[ageGroup].male = count;
+                } else if (gender === "Female") {
+                    ageGroups[ageGroup].female = count;
+                }
+            }
+
+            const chartData = {
+                labels: Object.keys(ageGroups),
+                maleCount: Object.values(ageGroups).map(group => group.male),
+                femaleCount: Object.values(ageGroups).map(group => group.female),
+            }
+            
+            console.log(chartData);
+            res.json(chartData);
+        }
+    });
+})
+
 app.get("/user_detail/:userId", (req, res) => {
     const userId = req.params.userId;
     res.sendFile(path.join(__dirname, "public", "user_detail.html"));
