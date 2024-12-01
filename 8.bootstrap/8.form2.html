@@ -124,31 +124,105 @@
                 name.classList.add("is-valid");
             }
         }   
+
+        const form = document.getElementById("exampleForm");
+        const resultDiv = document.getElementById("result");
+    
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+    
+            // 초기화
+            resultDiv.innerHTML = '';
+    
+            // 개별 입력값 검증
+            validateUsername();
+            validatePassword();
+            validateName();
+    
+            const username = document.getElementById("username");
+            const password = document.getElementById("password");
+            const name = document.getElementById("name");
+            const checkboxes = document.querySelectorAll('input[name="interest"]:checked');
+            const feedback = document.querySelector('.invalid-feedback');
+    
+            const isUsernameValid = username.classList.contains("is-valid");
+            const isPasswordValid = password.classList.contains("is-valid");
+            const isNameValid = name.classList.contains("is-valid");
+            const isCheckboxValid = checkboxes.length >= 1 && checkboxes.length <= 3;
+    
+            if (!isCheckboxValid) {
+                feedback.style.display = 'block';
+            } else {
+                feedback.style.display = 'none';
+            }
+    
+            // 모든 입력이 유효할 경우
+            if (isUsernameValid && isPasswordValid && isNameValid && isCheckboxValid) {
+                const selectedInterests = Array.from(checkboxes).map(cb => cb.value).join(', ');
+    
+                // 결과 출력
+                resultDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        <h5>폼 제출 완료!</h5>
+                        <p><strong>사용자명:</strong> ${username.value}</p>
+                        <p><strong>비밀번호:</strong> ${password.value}</p>
+                        <p><strong>이름:</strong> ${name.value}</p>
+                        <p><strong>관심 분야:</strong> ${selectedInterests}</p>
+                    </div>
+                `;
+            } else {
+                feedback.style.display = 'none';
+
+                // 하나라도 유효하지 않을 경우 에러 메시지 출력
+                resultDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        <h5>입력 항목을 확인해주세요!</h5>
+                        <p>모든 필드를 올바르게 입력해야 합니다.</p>
+                    </div>
+                `;
+            }
+        });
     </script>
 
-    <script>
+    <!-- <script>
         const form = document.getElementById("exampleForm"); 
         const resultDiv = document.getElementById("result");
 
         form.addEventListener("submit", (e) => {
             e.preventDefault();
 
-            const formData = new FormData(form);
-            const name = formData.get("name");
-            const email = formData.get("email");
-            const password = formData.get("password");
+            const checkboxes = document.querySelectorAll('input[name="interest"]:checked');
+            const feedback = document.querySelector('.invalid-feedback');
 
-            // 결과 출력
-            resultDiv.innerHTML = `
-                <div class="alert alert-success">
-                    <h5>폼 제출 완료!!</h5>
-                    <p><strong>Name:</strong>${name}</p>
-                    <p><strong>Email:</strong>${email}</p>
-                    <p><strong>Password:</strong>${password}</p>
-                </div>
-            `;
+            if (checkboxes.length < 1 || checkboxes.length > 3) {
+                feedback.style.display = 'block';
+                resultDiv.innerHTML = ''; // 이전 결과 초기화
+            } else {
+                feedback.style.display = 'none';
+
+                // 선택한 관심 분야를 가져오기
+                const selectedInterests = Array.from(checkboxes).map(cb => cb.value).join(', ');
+
+                // 결과 출력
+                const formData = new FormData(form);
+                const name = formData.get("name");
+                const email = formData.get("email");
+                const password = formData.get("password");
+    
+                // 결과 출력
+                resultDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        <h5>폼 제출 완료!!</h5>
+                        <p><strong>Name:</strong>${name}</p>
+                        <p><strong>Email:</strong>${email}</p>
+                        <p><strong>Password:</strong>${password}</p>
+                        <p><strong>Interest:</strong>${selectedInterests}</p>
+                    </div>
+                `;  
+            }
+
         });
-    </script>
+    </script> -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
