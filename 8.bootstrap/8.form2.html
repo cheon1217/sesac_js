@@ -59,7 +59,7 @@
                 <label><input type="checkbox" name="interest" value="관심 분야 3">관심 분야 3</label><br>
                 <label><input type="checkbox" name="interest" value="관심 분야 4">관심 분야 4</label><br>
                 <div class="invalid-feedback">
-                    최소 1개, 최대 4개까지 선택해야 합니다.
+                    최소 1개, 최대 3개까지 선택해야 합니다.
                 </div>
             </div>
             <!-- 제출 -->
@@ -151,9 +151,9 @@
             const isCheckboxValid = checkboxes.length >= 1 && checkboxes.length <= 3;
     
             if (!isCheckboxValid) {
-                feedback.style.display = 'block';
+                feedback.style.display = "block";
             } else {
-                feedback.style.display = 'none';
+                feedback.style.display = "none";
             }
     
             // 모든 입력이 유효할 경우
