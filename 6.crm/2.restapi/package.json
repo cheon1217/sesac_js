@@ -1,14 +1,7 @@
 {
-  "dependencies": {
-    "express": "^4.21.1",
-    "morgan": "^1.10.0",
-    "nunjucks": "^3.2.4",
-    "sqlite3": "^5.1.7"
-  },
   "name": "my-crm-project",
   "version": "1.0.0",
   "main": "app.js",
-  "devDependencies": {},
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon --ext js,html app.js",
@@ -17,5 +10,14 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "express": "^4.21.1",
+    "morgan": "^1.10.0",
+    "nunjucks": "^3.2.4",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
 }
