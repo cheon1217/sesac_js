@@ -81,8 +81,89 @@ function update() {
         // 밧줄과 공 충돌 처리
         for (let j = 0; j < ropes.length; j++) {
             const rope = ropes[j];
+            if (rope.y < ball.y + ball.radius && rope.x > ball.x - ball.radius && rope.x < ball.x + ball.radius) {
+                // 공이 맞으면 나누기 
+                if (ball.level > 1) {
+                    balls.push({
+                        x: ball.x,
+                        y: ball.y,
+                        radius: ball.radius / 2,
+                        dx: ball.dx,
+                        dy: -Math.abs(ball.dy),
+                        level: ball.level - 1,
+                        color: ball.color
+                    });
+                    balls.push({
+                        x: ball.x,
+                        y: ball.y,
+                        radius: ball.radius / 2,
+                        dx: -ball.dx,
+                        dy: -Math.abs(ball.dy),
+                        level: ball.level - 1,
+                        color: ball.color
+                    });
+                }
+                balls.splice(i, 1);
+                ropes.splice(i, 1); 
+                break;
+            }
         }
+    }
+    // 밧줄 업데이트
+    for (let i = ropes.length - 1; i >= 0; i--) {
+        ropes[i].y -= ropeSpeed;
+        if (ropes[i].y < 0) {
+            ropes.splice(i, 1);
+        }
+    }
+
+    // 공이 모두 없어졌는지 확인 (한번만 체크)
+    if (!checkinWin && balls.length === 0) {
+        checkinWin = true;
+        setTimeout(() => {
+            alert(`Stage ${currentStage} Clear!`);
+            currentStage++;
+            initializeBalls();
+            checkinWin = false;
+        }, 500);
     }
 }
 
+function drawPlayer() {
+    ctx.fillStyle = "blue";
+    ctx.fillRect(player.x, player.y, player.width, player.height);
+}
+
+function drawBalls() {
+    for (let ball of balls) {
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+        ctx.fillStyle = ball.color;
+        ctx.fill();
+        ctx.closePath();
+    }
+}
+
+function drawRopes() {
+    ctx.strokeStyle = "green";
+    ctx.lineWidth = 3;
+    for (let rope of ropes) {
+        ctx.beginPath();
+        ctx.moveTo(rope.x, rope.y);
+        ctx.lineTo(rope.x, player.y);
+        ctx.stroke();
+        ctx.closePath();
+    }
+}
+
+function gameLoop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    update();
+    drawPlayer();
+    drawBalls();
+    drawRopes();
+    requestAnimationFrame(gameLoop);
+}
+
 initializeBalls();
+gameLoop();
