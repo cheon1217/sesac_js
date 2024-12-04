@@ -150,11 +150,11 @@
             const isNameValid = name.classList.contains("is-valid");
             const isCheckboxValid = checkboxes.length >= 1 && checkboxes.length <= 3;
     
-            if (!isCheckboxValid) {
-                feedback.style.display = "block";
-            } else {
-                feedback.style.display = "none";
-            }
+            // if (!isCheckboxValid) {
+            //     feedback.style.display = "block";
+            // } else {
+            //     feedback.style.display = "none";
+            // }
     
             // 모든 입력이 유효할 경우
             if (isUsernameValid && isPasswordValid && isNameValid && isCheckboxValid) {
@@ -171,7 +171,7 @@
                     </div>
                 `;
             } else {
-                feedback.style.display = 'none';
+                // feedback.style.display = 'none';
 
                 // 하나라도 유효하지 않을 경우 에러 메시지 출력
                 resultDiv.innerHTML = `
