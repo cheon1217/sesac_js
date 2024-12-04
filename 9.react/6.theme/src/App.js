@@ -1,16 +1,21 @@
 import Navbar from "./Navbar";
 import Pagination from "./Pagination";
 import Table from "./Table";
+import { ThemeProvider } from "./ThemeContext";
 
 const App = () => {
 
 
     return (
-        <div>
+        <ThemeProvider>
             <Navbar />
-            <Table />
+
+            <main className="container mt-4">
+                <Table />
+            </main>
+
             <Pagination />
-        </div>
+        </ThemeProvider>
     );
 };
 
