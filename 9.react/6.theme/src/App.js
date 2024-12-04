@@ -1,13 +1,18 @@
+import { useEffect } from "react";
 import Navbar from "./Navbar";
 import Pagination from "./Pagination";
 import Table from "./Table";
-import { ThemeProvider } from "./ThemeContext";
+import { useTheme } from "./ThemeContext";
 
 const App = () => {
+    const { isDarkMode } = useTheme();
 
+    useEffect(() => {
+        document.body.className = isDarkMode ? "bg-dark text-light" : "bg-light text-dark";
+    }, [isDarkMode]);
 
     return (
-        <ThemeProvider>
+        <div>
             <Navbar />
 
             <main className="container mt-4">
@@ -15,7 +20,7 @@ const App = () => {
             </main>
 
             <Pagination />
-        </ThemeProvider>
+        </div>
     );
 };
 
