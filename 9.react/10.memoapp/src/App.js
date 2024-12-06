@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import MemoForm from "./components/MemoForm";
 import MemoList from "./components/MemoList";
+import MemoDetail from "./components/MemoDetail";
 // import MemoSearch from "./components/MemoSearch";
 import "./styles.css";
 
@@ -12,6 +13,9 @@ const App = () => {
     // const [search, setSearch] = useState("");
     const [sort, setSort] = useState("oldset"); // 기본값 "oldset"
     const [dragged, setDragged] = useState(null);
+
+    const [selectedMemo, setSelectedMemo] = useState(null);
+    const [isDetailOpen, setIsDetailOpen] = useState(false);
 
     useEffect(() => {
         if (dragged !== null) {
@@ -26,13 +30,13 @@ const App = () => {
     }, [memos]);
 
     const addMemo = (text) => {
-        const newMemo = {id: Date.now(), text}; // 고유 ID와 텍스트 값으로 메모 객체 생성
+        const newMemo = { id: Date.now(), text, completed: false }; // 고유 ID와 텍스트 값으로 메모 객체 생성
         setMemos([...memos, newMemo]); // 기존 메모 배열에 새 메모 추가
     }
 
     // 수정 함수
-    const editMemo = (id, changeText) => {
-        setMemos(memos.map(memo => memo.id === id ? { ...memo, text: changeText } : memo));
+    const editMemo = (id, changeText, newDetail, newAttachments) => {
+        setMemos(memos.map(memo => memo.id === id ? { ...memo, text: changeText, detail: newDetail, attachments: newAttachments } : memo));
     }
 
     // 특정 메모의 완료 상태 toggle
@@ -58,6 +62,22 @@ const App = () => {
             updatedMemos.splice(endIndex, 0, removed);
             return updatedMemos;
         });
+    };
+
+    const openMemoDetail = (id) => {
+        const memo = memos.find((m) => m.id === id);
+        setSelectedMemo(memo);
+        setIsDetailOpen(true);
+    };
+
+    const closeMemoDetail = () => {
+        setSelectedMemo(null);
+        setIsDetailOpen(false);
+    };
+
+    const saveMemoDetail = (id, changeText, newDetail, newAttachments) => {
+        editMemo(id, changeText, newDetail, newAttachments);
+        closeMemoDetail();
     };
 
     // 메모 정렬 
@@ -104,7 +124,15 @@ const App = () => {
                 onToggle={toggleComplete}
                 onEdit={editMemo}
                 onReMemos={reMemos}
+                onOpenDetail={openMemoDetail}
             />
+            {isDetailOpen && selectedMemo && (
+                <MemoDetail
+                    memo={selectedMemo}
+                    onSave={saveMemoDetail}
+                    onClose={closeMemoDetail}
+                />
+            )}
         </div>
     );
 }

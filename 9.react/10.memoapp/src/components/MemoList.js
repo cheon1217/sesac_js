@@ -1,6 +1,6 @@
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-const MemoList = ({ memos, onDelete, onEdit, onToggle, onReMemos }) => {
+const MemoList = ({ memos, onDelete, onEdit, onToggle, onReMemos, onOpenDetail }) => {
     const handleDragEnd = (result) => {
         const { source, destination } = result;
 
@@ -41,7 +41,10 @@ const MemoList = ({ memos, onDelete, onEdit, onToggle, onReMemos }) => {
                                             <input
                                                 type="checkbox"
                                                 checked={memo.completed}
-                                                onChange={() => onToggle(memo.id)}
+                                                onChange={(e) => {
+                                                    e.stopPropagation();
+                                                    onToggle(memo.id) 
+                                                }}
                                                 className="checkbox"
                                             />
                                             <input
@@ -50,7 +53,23 @@ const MemoList = ({ memos, onDelete, onEdit, onToggle, onReMemos }) => {
                                                 onChange={(e) => onEdit(memo.id, e.target.value)}
                                                 disabled={memo.completed}
                                             />
-                                            <button onClick={() => onDelete(memo.id)}>삭제</button>
+                                            <div className="button-group">
+                                                {/* 상세 버튼 */}
+                                                <button
+                                                    disabled = {memo.completed}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        onOpenDetail(memo.id);
+                                                    }}
+                                                >상세</button>
+                                                {/* 삭제 버튼 */}
+                                                <button 
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        onDelete(memo.id)
+                                                    }}
+                                                >삭제</button>
+                                            </div>
                                             {/* 햄버거 아이콘 (드래그 핸들) */}
                                             <span
                                                 {...provided.dragHandleProps}
