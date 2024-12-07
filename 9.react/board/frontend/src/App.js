@@ -3,7 +3,7 @@ import TablePage from "./components/TablePage";
 import PostPage from "./components/PostPage";
 
 const App = () => {
-    <div className="">
+    <div className="App">
         <Router>
             <Routes>
                 <Route path="/" element={<TablePage />}></Route>

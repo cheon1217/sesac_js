@@ -5,16 +5,13 @@ const cors = require("cors");
 const sqlite = require("better-sqlite3");
 
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 const upload = multer({ dest: "uploads/" });
 const dbfile = "./db/board.db";
 const db = new sqlite(dbfile);
 
 // 특정 도메인 허용
-app.use(cors({ 
-    origin: ['http://localhost:3001', 'http://127.0.0.1:3001'],
-    methods: ["GET", "POST"],
-}));
+app.use(cors());
 
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }));
@@ -30,7 +27,7 @@ app.get("/api/posts", (req, res) => {
     }
 });
 
-app.post("/post", (req, res) => {
+app.post("/post", upload.single("image"), (req, res) => {
     const { title, content } = req.body;
     const image = req.file ? req.file.filename : null;
 
