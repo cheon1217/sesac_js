@@ -1,11 +1,11 @@
 export const initDB = () => {
     return new Promise((resolve, reject) => {
-        const request = indexedDB.open("MemoApp", 1);
+        const request = indexedDB.open('MemoApp', 1);
 
         request.onupgradeneeded = (e) => {
             const db = e.target.result;
-            if (!db.objectStoreNames.contains("attachments")) {
-                db.createObjectStore("attachments", {keyPath: "id", autoIncrement: true });
+            if (!db.objectStoreNames.contains('attachments')) {
+                db.createObjectStore('attachments', { keyPath: 'id', autoIncrement: true });
             }
         };
 
@@ -16,8 +16,8 @@ export const initDB = () => {
 
 export const addAttachment = async (attachment) => {
     const db = await initDB();
-    const transaction = db.transaction("attachments", "readwrite");
-    const store = transaction.objectStore("attachments");
+    const transaction = db.transaction('attachments', 'readwrite');
+    const store = transaction.objectStore('attachments');
     return new Promise((resolve, reject) => {
         const request = store.add(attachment);
         request.onsuccess = () => resolve(request.result);
@@ -27,8 +27,8 @@ export const addAttachment = async (attachment) => {
 
 export const getAttachments = async () => {
     const db = await initDB();
-    const transaction = db.transaction("attachments", "readonly");
-    const store = transaction.objectStore("attachments");
+    const transaction = db.transaction('attachments', 'readonly');
+    const store = transaction.objectStore('attachments');
     return new Promise((resolve, reject) => {
         const request = store.getAll();
         request.onsuccess = () => resolve(request.result);
@@ -36,28 +36,30 @@ export const getAttachments = async () => {
     });
 };
 
-
 export const deleteAttachment = async (id) => {
     const db = await initDB();
-    const transaction = db.transaction("attachments", "readwrite");
-    const store = transaction.objectStore("attachments");
+    const transaction = db.transaction('attachments', 'readwrite');
+    const store = transaction.objectStore('attachments');
     return new Promise((resolve, reject) => {
         const request = store.delete(id);
-        request.onsuccess = () => resolve(request.result);
+        request.onsuccess = () => resolve();
         request.onerror = (e) => reject(e.target.error);
     });
 };
 
 export const deleteAttachmentsByMemoId = async (memoId) => {
     const db = await initDB();
-    const transaction = db.transaction("attachments", "readwrite");
-    const store = transaction.objectStore("attachments");
+    const transaction = db.transaction('attachments', 'readwrite');
+    const store = transaction.objectStore('attachments');
 
     return new Promise((resolve, reject) => {
         const request = store.getAll();
         request.onsuccess = () => {
             const attachments = request.result;
-            const idsToDelete = attachments.filter((attachment) => attachment.memoId === memoId).map((attachment) => attachment.id);
+            const idsToDelete = attachments
+                .filter((attachment) => attachment.memoId === memoId)
+                .map((attachment) => attachment.id);
+
             idsToDelete.forEach((id) => {
                 store.delete(id);
             });

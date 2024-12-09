@@ -33,8 +33,8 @@ const MemoDetail = ({ memo, onSave, onClose }) => {
                 loadAttachments();
             };
             reader.readAsDataURL(file);
-            fileInputRef.current.value = file;
         }
+        fileInputRef.current.value = "";
     };
 
     const handleDeleteAttachment = async (id) => {
@@ -74,7 +74,7 @@ const MemoDetail = ({ memo, onSave, onClose }) => {
                     <ul className="attachment-list">
                         {attachments.map((file) => (
                             <li key={file.id}>
-                                {file.type.startsWith("image/") ? (
+                                {file.type.startsWith("images/") ? (
                                     <img 
                                         src={file.data}
                                         alt={file.name}

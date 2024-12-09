@@ -8,17 +8,6 @@ h1 {
     margin: 20px 0;
 }
 
-.search-bar {
-    display: block;
-    margin: 0 auto 20px;
-    width: 300px;
-    padding: 8px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
 .memo-form {
     display: flex;
     justify-content: center;
@@ -46,7 +35,25 @@ h1 {
     display: flex;
     align-items: center;
     margin-bottom: 8px;
-    width: 300px;
+    background-color: white;
+}
+
+.memo-item:hover { /* 추가 */
+    padding: 8px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease;
+}
+
+.memo-item.dragging {
+    padding: 8px;
+    background-color: #e3f2fd; /* 드래그 중인 항목에 대한 배경색 */
+    border: 1px solid #2196f3;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 .memo-item input[type='text'] {
@@ -55,8 +62,27 @@ h1 {
     margin-right: 8px;
 }
 
+.memo-item .button-group { /* 추가 */
+    display: flex;
+    gap: 5px;
+}
+
 .memo-item button {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
     height: 36px;
+    background-color: #fff;
+    color: #333;
+    transition: all 0.2s ease;
+}
+
+.memo-item button:hover {
+    background-color: #f0f0f0;
+    border-color: #999;
+    color: #000;
 }
 
 .memo-item.completed input[type='text'] {
@@ -71,15 +97,27 @@ h1 {
     cursor: pointer;
 }
 
-.sort-dropdown {
-    display: block;
-    margin: 0 auto 20px;
-    padding: 8px;
+/* 검색창과 정렬 옵션 컨테이너 */
+.search-and-sort-container {
+    display: flex;
+    justify-content: center;  /* 가로 가운데 정렬 */
+    align-items: center;      /* 세로 가운데 정렬 */
+    gap: 10px;                /* 두 요소 간의 간격 */
+    margin-bottom: 20px;      /* 하단 여백 */
+}
+
+/* 검색창 스타일 */
+.search-and-sort-container input.search-input {
+    padding: 10px;
     font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    width: 200px;
+    width: 200px;             /* 검색창 너비 고정 */
+}
+
+/* 정렬 옵션 스타일 */
+.search-and-sort-container select {
+    padding: 8px 12px;
+    font-size: 14px;
+    width: auto;
 }
 
 .drag-handle {
@@ -87,10 +125,6 @@ h1 {
     font-size: 20px; /* 아이콘 크기 */
     margin-left: 10px; /* 적절한 간격 */
     color: #888; /* 아이콘 색상 */
-}
-
-.drag-handle:hover {
-    color: #333; /* 호버 시 색상 강조 */
 }
 
 .memo-detail-overlay {
