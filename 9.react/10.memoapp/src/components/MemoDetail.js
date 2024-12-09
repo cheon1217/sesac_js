@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
+import { addAttachment, deleteAttachment, getAttachments } from "../utils/indexedDB";
 
 const MemoDetail = ({ memo, onSave, onClose }) => {
     const [text, setTitle] = useState(memo.text);
@@ -6,18 +7,39 @@ const MemoDetail = ({ memo, onSave, onClose }) => {
 
     const [attachments, setAttachments] = useState(memo.attachments || []);
 
-    const handleFileUpload = (e) => {
-        const files = Array.from(e.target.files); // 업로드된 파일 배열
-        const newAttachments = files.map((file) => ({
-            name: file.name,
-            url: URL.createObjectURL(file),
-            type: file.type,
-        }));
-        setAttachments([...attachments, ...newAttachments]);
+    const fileInputRef = useRef(null);
+
+    useEffect(() => {
+        loadAttachments();
+    }, []);
+
+    const loadAttachments = async () => {
+        const files = await getAttachments();
+        setAttachments(files);
     };
 
-    const handleDeleteAttachment = (indexToDelete) => {
-        setAttachments(attachments.filter((_, index) => index !== indexToDelete))
+    const handleFileUpload = (e) => {
+        const files = Array.from(e.target.files); // 업로드된 파일 배열
+        for (let file of files) {
+            const reader = new FileReader();
+            reader.onload = async () => {
+                const attachment = {
+                    name: file.name,
+                    data: reader.result,
+                    type: file.type,
+                    memoId: memo.id,
+                };
+                await addAttachment(attachment);
+                loadAttachments();
+            };
+            reader.readAsDataURL(file);
+            fileInputRef.current.value = file;
+        }
+    };
+
+    const handleDeleteAttachment = async (id) => {
+        await deleteAttachment(id);
+        loadAttachments();
     };
 
     const handleSave = () => {
@@ -47,24 +69,25 @@ const MemoDetail = ({ memo, onSave, onClose }) => {
                         type="file"
                         multiple
                         onChange={handleFileUpload}
+                        rel={fileInputRef}
                     />
                     <ul className="attachment-list">
-                        {attachments.map((file, index) => (
-                            <li key={index}>
+                        {attachments.map((file) => (
+                            <li key={file.id}>
                                 {file.type.startsWith("image/") ? (
                                     <img 
-                                        src={file.utl}
+                                        src={file.data}
                                         alt={file.name}
                                         className="attachment-thumbnail"
                                     />
                                 ) : (
-                                    <a href={file.url} download={file.name}>
+                                    <a href={file.data} download={file.name}>
                                         {file.name}
                                     </a>
                                 )}
                                 <button 
                                     className="delete-attachment"
-                                    onClick={() => handleDeleteAttachment(index)}
+                                    onClick={() => handleDeleteAttachment(file.id)}
                                 >
                                     삭제
                                 </button>

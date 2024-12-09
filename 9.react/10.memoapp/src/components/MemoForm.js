@@ -5,9 +5,11 @@ const MemoForm = ({ addMemo }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault(); // 기본 폼 제출 방지
-        addMemo(input);
-        setInput("");
-    }
+        if (input.trim()) {
+            addMemo(input);
+            setInput("");
+        }
+    };
 
     return (
         <form onSubmit={handleSubmit} className="memo-form">
@@ -19,7 +21,7 @@ const MemoForm = ({ addMemo }) => {
             />
             <button type="submit">추가</button>
         </form>
-    )
-}
+    );
+};
 
 export default MemoForm;

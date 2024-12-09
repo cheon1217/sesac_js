@@ -1,4 +1,5 @@
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import MemoItem from "./MemoItem";
 
 const MemoList = ({ memos, onDelete, onEdit, onToggle, onReMemos, onOpenDetail }) => {
     const handleDragEnd = (result) => {
@@ -28,63 +29,17 @@ const MemoList = ({ memos, onDelete, onEdit, onToggle, onReMemos, onOpenDetail }
                         {...provided.droppableProps}
                         className="memo-list"
                     >
-                        {memos.length > 0 ? (
-                            memos.map((memo, index) => (
-                                <Draggable key={memo.id} draggableId={memo.id.toString()} index={index}>
-                                    {(provided) => (
-                                        <div
-                                            ref={provided.innerRef} // ref 전달
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                            className={`memo-item ${memo.completed ? 'completed' : ''}`}
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                checked={memo.completed}
-                                                onChange={(e) => {
-                                                    e.stopPropagation();
-                                                    onToggle(memo.id) 
-                                                }}
-                                                className="checkbox"
-                                            />
-                                            <input
-                                                type="text"
-                                                value={memo.text}
-                                                onChange={(e) => onEdit(memo.id, e.target.value)}
-                                                disabled={memo.completed}
-                                            />
-                                            <div className="button-group">
-                                                {/* 상세 버튼 */}
-                                                <button
-                                                    disabled = {memo.completed}
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        onOpenDetail(memo.id);
-                                                    }}
-                                                >상세</button>
-                                                {/* 삭제 버튼 */}
-                                                <button 
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        onDelete(memo.id)
-                                                    }}
-                                                >삭제</button>
-                                            </div>
-                                            {/* 햄버거 아이콘 (드래그 핸들) */}
-                                            <span
-                                                {...provided.dragHandleProps}
-                                                className="drag-handle"
-                                                title="드래그하여 이동"
-                                            >
-                                                ≡
-                                            </span>
-                                        </div>
-                                    )}
-                                </Draggable>
-                            ))
-                        ) : (
-                            <p>메모가 없습니다.</p>
-                        )}
+                        {memos.map((memo, index) => (
+                            <MemoItem
+                                key={memo.id}
+                                memo={memo}
+                                index={index}
+                                onDelete={onDelete}
+                                onEdit={onEdit}
+                                onToggle={onToggle}
+                                onOpenDetail={onOpenDetail}
+                            />
+                        ))}
                         {provided.placeholder}
                     </div>
                 )}

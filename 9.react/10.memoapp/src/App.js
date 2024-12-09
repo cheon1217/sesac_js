@@ -4,14 +4,20 @@ import MemoList from "./components/MemoList";
 import MemoDetail from "./components/MemoDetail";
 // import MemoSearch from "./components/MemoSearch";
 import "./styles.css";
+import MemoSearch from "./components/MemoSearch";
+import SortOptions from "./components/SortOptions";
+import { deleteAttachmentsByMemoId } from "./utils/indexedDB";
 
 const App = () => {
     const [memos, setMemos] = useState(() => {
         const savedMemos = localStorage.getItem("memos");
         return savedMemos ? JSON.parse(savedMemos) : [];
     });
-    // const [search, setSearch] = useState("");
-    const [sort, setSort] = useState("oldset"); // 기본값 "oldset"
+    const [search, setSearch] = useState("");
+    // const [sort, setSort] = useState("oldset"); // 기본값 "oldset"
+    const [sort, setSort] = useState(() => {
+        return localStorage.getItem("sortOrder") || "manual";
+    })
     const [dragged, setDragged] = useState(null);
 
     const [selectedMemo, setSelectedMemo] = useState(null);
@@ -25,9 +31,20 @@ const App = () => {
         }
     }, [dragged]);
 
-    useEffect(() => {
-        localStorage.setItem("memos", JSON.stringify(memos));
-    }, [memos]);
+    // 메모 정렬 
+    const sortedMemos = [...memos].sort((a, b) => {
+        if (sort === "newest") {
+            return b.id - a.id;
+        } else if (sort === "oldest") {
+            return a.id - b.id;
+        } else if (sort === "alphabetical") {
+            return a.text.localeCompare(b.text);
+        }
+        return 0; // "manual"
+    });
+
+    // 검색 필터
+    const filteredMemos = sortedMemos.filter(memo => memo.text.toLowerCase().includes(search.toLowerCase()));
 
     const addMemo = (text) => {
         const newMemo = { id: Date.now(), text, completed: false }; // 고유 ID와 텍스트 값으로 메모 객체 생성
@@ -36,7 +53,15 @@ const App = () => {
 
     // 수정 함수
     const editMemo = (id, changeText, newDetail, newAttachments) => {
-        setMemos(memos.map(memo => memo.id === id ? { ...memo, text: changeText, detail: newDetail, attachments: newAttachments } : memo));
+        setMemos(memos.map(memo => memo.id === id ? 
+            { 
+                ...memo, 
+                text: changeText !== undefined ? changeText : memo.text, 
+                detail: newDetail !== undefined ? newDetail : memo.detail, 
+                attachments: newAttachments !== undefined ? newAttachments : memo.attachments, 
+            }
+            : memo
+        ));
     }
 
     // 특정 메모의 완료 상태 toggle
@@ -45,12 +70,11 @@ const App = () => {
     }
 
     // 삭제 함수 구현
-    const deleteMemo = (id) => {
+    const deleteMemo = async (id) => {
+        await deleteAttachmentsByMemoId(id);
         setMemos(memos.filter(memo => memo.id !== id))
     }
-    
-    // 검색 필터
-    // const filteredMemos = memos.filter(memo => memo.text.toLowerCase().includes(search.toLowerCase()));
+
 
     const reMemos = (startIndex, endIndex) => {
         console.log("드래그 시작: ", startIndex, "드롭 위치 인덱스: ", endIndex);
@@ -63,6 +87,14 @@ const App = () => {
             return updatedMemos;
         });
     };
+
+    useEffect(() => {
+        localStorage.setItem("memos", JSON.stringify(memos));
+    }, [memos]);
+
+    useEffect(() => {
+        localStorage.setItem("sort", sort);
+    }, [sort]);
 
     const openMemoDetail = (id) => {
         const memo = memos.find((m) => m.id === id);
@@ -80,20 +112,6 @@ const App = () => {
         closeMemoDetail();
     };
 
-    // 메모 정렬 
-    const sortedMemos = (() => {
-        if (sort === "manual") {
-            return memos;
-        } else if (sort === "newset") {
-            return [...memos].sort((a, b) => b.id - a.id);
-        } else if (sort === "oldset") {
-            return [...memos].sort((a, b) => a.id - b.id);
-        } else if (sort === "alphabetical") {
-            return [...memos].sort((a, b) => a.text.localeCompare(b.text));
-        }
-        return memos;
-    })();
-
     return (
         <div className="app">
             <h1>메모앱 (투두리스트)</h1>
@@ -106,7 +124,7 @@ const App = () => {
             /> */}
             {/* <MemoSearch search={setSearch} /> */}
             {/* 정렬 선택 드롭다운 */}
-            <select
+            {/* <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value)}
                 className="sort-dropdown"
@@ -115,11 +133,15 @@ const App = () => {
                 <option value="oldset">예전</option>
                 <option value="alphabetical">알파펫순</option>
                 <option value="manual">수동정렬</option>
-            </select>
+            </select> */}
+            <div className="search-and-sort-container">
+                <MemoSearch onSearch={setSearch} />
+                <SortOptions sort={sort} onSortChange={setSort} />
+            </div>
             <MemoForm addMemo={addMemo} />
             <MemoList 
-                // memos={filteredMemos}
-                memos={sortedMemos}
+                memos={filteredMemos}
+                // memos={sortedMemos}
                 onDelete={deleteMemo}
                 onToggle={toggleComplete}
                 onEdit={editMemo}
