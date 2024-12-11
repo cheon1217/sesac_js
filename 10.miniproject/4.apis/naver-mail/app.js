@@ -11,10 +11,6 @@ const PORT = 3000;
 app.use(express.json());
 app.use(morgan("dev"));
 
-
-const nodemailer = require("nodemailer");
-const { verify } = require("crypto");
-
 const transport = nodemailer.createTransport({
     host: "smtp.naver.com",
     port: 465,
