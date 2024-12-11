@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kakao Search</title>
+</head>
+<body>
+    <h1>koogle</h1>
+    <form id="searchForm">
+        <input type="text" id="query" placeholder="검색하시오" required />
+        <button type="button" data-type="web">웹</button>
+        <button type="button" data-type="image">이미지</button>
+        <button type="button" data-type="vclip">동영상</button>
+    </form>
+
+    <div id="results"></div>
+    
+    <div id="pagination">
+        <button id="prevButton" style="display: none;">이전</button>
+        <span id="currentPageInfo"></span>
+        <button id="nextButton" style="display: none;">다음</button>
+    </div>
+
+    <script>
+        let currentQuery = "";
+        let currentType = "";
+        let currentPage = 1;
+
+
+        document.querySelectorAll("#searchForm > button").forEach(button => {
+            button.addEventListener("click", async (e) => {
+                const query = document.getElementById("query").value;
+                const type = e.target.getAttribute("data-type");
+
+                if (!query) {
+                    alert("검색어 입력");
+                    return;
+                }
+
+                currentPage = 1;
+                currentQuery = query;
+                currentType = type;
+
+                await fetchResults(currentQuery, currentType, currentPage);
+            });
+        });
+
+        async function fetchResults(query, type, page) {
+            try {
+                const response = await fetch(`/api/search?query=${encodeURIComponent(query)}&type=${type}&page=${page}`);
+                if (!response.ok) throw new Error("Failed to fetch");
+
+                const results = await response.json();
+                displayResults(type, results);
+                setupPagination(query, type, results.meta.pageable_count, page);
+            } catch (err) {
+                console.error("Error: ", err.message);
+            }
+        }
+
+        function displayResults(type, results) {
+            const resultsContainer = document.getElementById("results");
+            resultsContainer.innerHTML = "";
+
+            if (!results.documents || results.documents.length === 0) {
+                resultsContainer.innerHTML = `<p>No results</p>`;
+                return;
+            }
+
+            results.documents.forEach(item => {
+                const resultDiv = document.createElement("div");
+                resultDiv.classList.add("result");
+
+                if (type === "web") {
+                    resultDiv.innerHTML = `
+                        <h3>${item.title}</h3>
+                        <p>${item.contents}</p>
+                        <a href="${item.url}" target="_blank">${item.url}</a>
+                    `;
+                } else if (type === "image") {
+                    resultDiv.innerHTML = `
+                        <img src="${item.thumbnail_url}" alt="Thumbnail" />
+                        <p>${item.display_sitename}</p>
+                        <a href="${item.doc_url}" target="_blank">${item.doc_url}</a>
+                        <p>Width: ${item.width}, Height: ${item.height}</p>
+                        <p>Datetime: ${item.datetime}</p>
+                    `;
+                } else if (type === "vclip") {
+                    resultDiv.innerHTML = `
+                        <h3>${item.title}</h3>
+                        <p>Author: ${item.author}</p>
+                        <a href="${item.url}" target="_blank">${item.url}</a>
+                        <p>Play time: ${item.play_time} seconds</p>
+                        <img src="${item.thumbnail}" alt="Thumbnail">
+                        <p>Datetime: ${item.datetime}</p>
+                    `;
+                }
+
+                resultsContainer.appendChild(resultDiv);
+            });
+        }
+
+        function setupPagination(query, type, totalResults, page) {
+            const totalPages = Math.ceil(totalResults / 10);
+            const currentPageInfo = document.getElementById("currentPageInfo");
+            const prevButton = document.getElementById("prevButton");
+            const nextButton = document.getElementById("nextButton");
+
+            // 현재 페이지 
+            currentPage = page;
+            currentPageInfo.textContent = `현재 페이지 ${page}`;
+
+            if (page > 1) {
+                prevButton.style.display = "inline";
+                prevButton.onclick = () => fetchResults(query, type, page - 1);
+            } else {
+                prevButton.style.display = "none";
+            }
+
+            if (page < totalPages) {
+                nextButton.style.display = "inline";
+                nextButton.onclick = () => fetchResults(query, type, page + 1);
+            } else {
+                nextButton.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
