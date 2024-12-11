@@ -4,6 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kakao Search</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        #results {
+            margin-top: 20px;
+            width: 80%;
+        }
+        .result {
+            margin-bottom: 20px;
+        }
+        img {
+            max-width: 100px;
+            max-height: 100px;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            gap: 10px;
+        }
+        .pagination-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .current-page {
+            font-weight: bold;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
     <h1>koogle</h1>
@@ -16,9 +52,9 @@
 
     <div id="results"></div>
     
-    <div id="pagination">
+    <div id="pagination" class="pagnation">
         <button id="prevButton" style="display: none;">이전</button>
-        <span id="currentPageInfo"></span>
+        <span id="currentPageInfo" class="current-page"></span>
         <button id="nextButton" style="display: none;">다음</button>
     </div>
 
