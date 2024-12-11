@@ -8,10 +8,12 @@ const path = require("path");
 const app = express();
 const PORT = 3000;
 
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(morgan("dev"));
 
 const transport = nodemailer.createTransport({
+    service: "naver",
     host: "smtp.naver.com",
     port: 465,
     auth: {
@@ -75,9 +77,21 @@ app.post("/signup", (req, res) => {
 });
 
 app.post("/verify", (req, res) => {
-    const { email, code } = req.body;
-    console.log("입력값:", email, code);
-    console.log("우리 DB:", database);
+    // const { email, code } = req.body;
+    // console.log("입력값:", email, code);
+    // console.log("우리 DB:", database);
+    const userEmail = req.body.email;
+    const userCode = req.body.code;
+
+    const user = database.users.find(user => user.email === userEmail);
+    console.log(`입력값: ${userEmail}, ${userCode}`);
+    console.log(user, userCode === user.code);
+
+    if (user && userCode === user.code) {
+        res.json({ message: "회원가입이 완료되었습니다." });
+    } else {
+        res.status(400).json({ message: "인증 코드가 일치하지 않습니다" });
+    }
 });
 
 app.listen(PORT, () => {

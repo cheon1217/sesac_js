@@ -23,7 +23,7 @@
         <label for="code">인증코드:</label>
         <input type="text" id="code" name="code" required />
         <input type="hidden" id="emailVerify" name="email" value="" />
-        <button type="button" onclick="TODO()">인증코드확인</button>
+        <button type="button" onclick="sendVerifyCode()">인증코드확인</button>
     </form>
     <p id="verificationResult"></p>
 
@@ -76,6 +76,7 @@
                 })
                 .then((data) => {
                     console.log("Success: 최종완료", data);
+                    document.getElementById("verifyForm").style.display = "none";
                     document.getElementById("verificationResult").innerText = data.message;
                 })
                 .catch((error) => {
