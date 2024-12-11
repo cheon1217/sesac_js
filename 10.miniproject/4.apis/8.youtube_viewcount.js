@@ -13,7 +13,7 @@ const videoUrlAPI = "https://www.googleapis.com/youtube/v3/videos";
 const maxResultPerPage = 10;
 const totalPages = 5;
 
-const searchResult = []; // 검색 결과 담을 곳
+const searchResult = [];
 
 const fetchYoutube = async () => {
     let nextPageToken = null;
@@ -21,47 +21,125 @@ const fetchYoutube = async () => {
     try {
         for (let page = 1; page <= totalPages; page++) {
             const params = {
-                part: "snippet",
-                q: "자바스크립트 개발",
-                type: "video",
+                part: 'snippet',
+                q: '자바스크립트 개발',
+                type: 'video',
                 maxResults: maxResultPerPage,
                 pageToken: nextPageToken,
                 key: API_KEY,
             }
-            const response = await axios.get(searchUrlAPI, { params });
-            const data = await response.data;
 
+            const response = await axios.get(searchUrlAPI, { params });
+            const data = response.data;
+
+            // console.log('data.items = ', data.items);
             searchResult.push(...data.items);
 
+            // 다음 페이지의 ID
             nextPageToken = data.nextPageToken;
+            console.log('다음 페이지: ', nextPageToken);
         }
-        
-        for (let index = 0; index < searchResult.length; index++) {
-        // searchResult.forEach(async (item) => {
-            const item = searchResult[index];
-            const title = item.snippet.title;
-            const videoId = item.id.videoId;
-            const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
-            const description = item.snippet.description;
 
-            // 각각의 비디오 클림에 대해서 추가 정보를 저장
+        const table = [];
+        // const videoInfo = data.items.forEach(item => {
+        // searchResult.forEach(async (item) => {
+        for (let index = 0; index < searchResult.length; index++) {
+            item = searchResult[index];
+            // console.log('각각의 비디오 클립 조회: ', item);
+            let title = item.snippet.title; // 영상 제목
+            const videoId = item.id?.videoId // Video clip ID
+            const videoUrl = `https://www.youtube.com/watch?v=${videoId}`; // 우리가 만든 URL
+            const description = item.snippet.description; // 영상 설명
+
+            // 각각의 비디오 클립에 대해서 추가 정보를 조회
             const videoParams = {
-                part: "statistics",
+                part: 'statistics',
                 id: videoId,
                 key: API_KEY,
             }
-            const videoResponse = await axios.get(videoUrlAPI, {params : videoParams });
-            console.log(videoResponse.data);
-            break;
 
-            // console.log(`영상제목: ${title}`);
-            // console.log(`URL 주소: ${videoUrl}`);
-            // console.log(`설명: ${description}`);
-            // console.log(`-`.repeat(40));
+            const maxTitleLength = 30;
+            if (title.length > maxTitleLength) {
+                title = title.slice(0, maxTitleLength) + "...";
+            };
+
+            const videoResponse = await axios.get(videoUrlAPI, { params: videoParams });
+            const videoData = videoResponse.data;
+            const viewCount = videoData.items[0].statistics?.viewCount || 'N/A';
+            console.log(videoData.items?.[0]?.statistics.viewCount);
+            table.push({ Index: index + 1, Title: title, 'ViewCount': viewCount, 'VideoURL': videoUrl });
         }
-    } catch (err) {
-        console.error("요청 실패: ", err.message);
-    }
-}
 
-fetchYoutube();
+        // Table 형태로 출력
+        console.table(table);
+    } catch (error) {
+        console.error('요청 실패: ', error.message);
+        // console.trace('요청 실패');
+    }
+};
+
+// fetchYoutube();
+
+
+const fetchYoutube_parallel = async () => {
+    let nextPageToken = null;
+
+    try {
+        for (let page = 1; page <= totalPages; page++) {
+            const params = {
+                part: 'snippet',
+                q: '아이유',
+                type: 'video',
+                maxResults: maxResultPerPage,
+                pageToken: nextPageToken,
+                key: API_KEY,
+            }
+
+            console.log("start req");
+            const response = await axios.get(searchUrlAPI, { params });
+            console.log("end req");
+            const data = response.data;
+
+            // console.log('data.items = ', data.items);
+            searchResult.push(...data.items);
+        }
+        
+        /// Promise.all을 통해서 전체를 병행처리
+        const table = await Promise.all(
+            searchResult.map(async (item, index) => {
+                // console.log('각각의 비디오 클립 조회: ', item);
+                let title = item.snippet.title; // 영상 제목
+                const videoId = item.id?.videoId // Video clip ID
+                const videoUrl = `https://www.youtube.com/watch?v=${videoId}`; // 우리가 만든 URL
+                const description = item.snippet.description; // 영상 설명
+
+                // 각각의 비디오 클립에 대해서 추가 정보를 조회
+                const videoParams = {
+                    part: 'statistics',
+                    id: videoId,
+                    key: API_KEY,
+                }
+
+                const maxTitleLength = 30;
+                if (title.length > maxTitleLength) {
+                    title = title.slice(0, maxTitleLength) + "...";
+                };
+
+                const videoResponse = await axios.get(videoUrlAPI, { params: videoParams });
+                const videoData = videoResponse.data;
+                const viewCount = videoData.items[0]?.statistics?.viewCount || 'N/A';
+                return { Index: index + 1, Title: title, 'ViewCount': viewCount, 'VideoURL': videoUrl };
+            })
+        )
+        console.table(table);
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+console.time("실행시간");
+(async () => {
+    await fetchYoutube_parallel();
+    // await fetchYoutube();
+})
+console.timeEnd("실행시간");
