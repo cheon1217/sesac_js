@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <P>로그인 성공하셨습니다. 수고링!</P>
+    <button onclick="logout()">logout</button>
+    <!-- <button onclick="location.href='/login'">로그인 페이지로 이동</button> -->
+
+    <script>
+        async function logout() {
+            const email = localStorage.getItem("userEmail");
+            if (!email) {
+                alert("로그인 정보가 없습니다.");
+                window.location.href = "/login";
+                return;
+            }
+
+            const resposne = await fetch("/api/auth/logout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email }),
+            });
+
+            if (resposne.ok) {
+                localStorage.removeItem("userEmail");
+                alert("로그아웃 성공");
+                window.location.href = "/login";
+            } else {
+                alert("로그아웃 실패, 다시 시도하세요.");
+            }
+        }
+    </script>
+</body>
+</html>

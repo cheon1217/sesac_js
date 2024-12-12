@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <input type="email" id="email" placeholder="이메일을 작성하시오..." />
+    <input type="password" id="password" placeholder="비밀번호를 작성하시오..." />
+    <button onclick="login()">Login</button>
+    <p>회원이 아니신가요? <a href="/register">회원가입</a></p>
+
+    <script>
+        async function login() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            const response = await fetch("/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                localStorage.setItem("userEmail", email); // 이메일 저장
+                accessDashboard(); // 대시보드 접근함수
+            } else {
+                alert(data.error);
+            }
+        }
+
+        async function accessDashboard() {
+            const email = localStorage.getItem("userEmail"); // 로컬 스토리지에서 이메일 가져오기
+            const response = await fetch("/dashboard", {
+                method: "GET",
+                credentials: "include",
+            });
+
+            if (response.ok) {
+                window.location.href = "/dashboard";
+            } else {
+                alert("인증되지 않았습니다. 로그인 해주세요.");
+                window.location.href = "/login";
+            }
+        }
+    </script>
+</body>
+</html>
