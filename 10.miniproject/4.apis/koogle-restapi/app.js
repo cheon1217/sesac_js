@@ -51,6 +51,7 @@ app.get("/api/search", async (req, res) => {
             params
         });
 
+        console.log(response);
         res.json(response.data);
     } catch (err) {
         console.error("Error api: ", err.message);
