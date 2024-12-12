@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""
+    />
+    <style>
+        #map { 
+            height: 600px; 
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+     <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin="">
+    </script>
+
+    <script>
+        var map = L.map('map').setView([37.51854, 126.93751], 13); // 63빌딩 좌표
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: ''
+        }).addTo(map);
+
+        var touristSpot = [
+            {
+                name: "경복궁",
+                location: [37.579617, 126.977041],
+                description: "경복궁은 조선 시대의 범궁이자 서울의 대표적인 궁궐입니다.",
+                imageUrl: "https://via.placeholder.com/150",
+            },
+            {
+                name: "명동",
+                location: [37.5583576447485, 126.985241620075],
+                description: "명동은 조선 시대의 범궁이자 서울의 대표적인 궁궐입니다.",
+                imageUrl: "https://via.placeholder.com/150",
+            },
+            {
+                name: "남산 타워",
+                location: [37.5515, 126.988],
+                description: "남산 타워는 조선 시대의 범궁이자 서울의 대표적인 궁궐입니다.",
+                imageUrl: "https://via.placeholder.com/150",
+            },
+            // 원하는 곳 추가
+        ]
+
+        touristSpot.forEach((spot) => {
+            var marker = L.marker(spot.location).addTo(map).bindPopup(spot.name);
+
+            marker.on("click", () => {
+                map.flyTo(spot.location, 16);
+            })
+
+            marker.on("click", () => {
+                var popupContent = `
+                    <div>
+                        <h3>${spot.name}</h3>
+                        <p>${spot.description}</p>
+                        <img src="${spot.imageUrl}" alt="${spot.name}" style="width: 100%; height: auto;" />
+                    </div>
+                `
+
+                var popup = L.popup()
+                    .setLatLng(spot.location)
+                    .setContent(popupContent)
+                    .openOn(map);
+            })
+        })
+
+        // var marker = L.marker([37.51854, 126.93751]).addTo(map);
+        var circle = L.circle([37.51854, 126.93751], {
+            color: "red",
+            fillColor: "blue",
+            fillOpacity: 0.5,
+            radius: 200,
+        }).addTo(map);
+    </script>
+</body>
+</html>

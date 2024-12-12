@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""
+    />
+    <style>
+        #map { 
+            height: 600px; 
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <label for="start">출발지 (lat, lng):</label>
+        <input type="text" id="start" value="37.5665, 126.9784" placeholder="예: 37.5665, 126.9784" />
+        <br />
+        <label for="end">도착지 (lat, lng):</label>
+        <input type="text" id="end" value="37.4947, 127.0276" placeholder="예: 37.4947, 127.0276" />
+        <br />
+        <button onclick="findRoute()" style="margin-bottom: 10px;">경로 찾기</button>
+    </div>
+    <div id="map"></div>
+
+     <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin="">
+    </script>
+
+    <script>
+        var map = L.map('map').setView([37.51854, 126.93751], 13); // 63빌딩 좌표
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: ''
+        }).addTo(map);
+
+        function findRoute() {
+            var startInput = document.getElementById("start").value;
+            var endInput = document.getElementById("end").value;
+
+            if (!startInput || !endInput) {
+                alert("출발지와 도착지 좌표를 모두 입력해야 합니다.");
+            }
+
+            var startCoord = startInput.split(",").map((coord) => parseFloat(coord.trim()));
+            var endCoord = endInput.split(",").map((coord) => parseFloat(coord.trim()));
+
+            // 검증코드 생략
+            var route = L.polyline([startCoord, endCoord], {color: "blue"}).addTo(map);
+            map.fitBounds(route.getBounds());
+        }
+    </script>
+</body>
+</html>
