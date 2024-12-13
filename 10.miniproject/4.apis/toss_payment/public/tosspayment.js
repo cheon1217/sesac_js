@@ -1,9 +1,9 @@
 let selectedProduct = null;
 let selectedPaymentMethod = null;
 let clientKey;
-let customerKey// 랜덤 고객
-let tossPayments
-let payment // 토스의 함수 호출
+let customerKey; // 랜덤 고객
+let tossPayments;
+let payment; // 토스의 함수 호출
 
 async function initializePayments() {
     try {
