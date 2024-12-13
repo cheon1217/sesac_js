@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>OpenStreetMap Routing</title>
+        <!-- Leaflet 라이브러리 추가 -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        
+        <!-- https://leafletjs.com/plugins.html#routing -->
+        <!-- Leaflet Routing Machine 라이브러리 추가 -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+        <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    </head>
+    <body>
+        <!-- 지도를 표시할 div 엘리먼트 -->
+        <div id="map" style="height: 600px"></div>
+
+        <script>
+            // Leaflet을 사용하여 지도 생성
+            var map = L.map('map').setView([37.5199, 126.9406], 14); // 서울 63빌딩 좌표로 지도 중심 설정
+
+            // OpenStreetMap 타일 레이어 추가
+            L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+            }).addTo(map);
+
+            var waypoints = [
+                { name: "63빌딩", lat: 37.5199, long: 126.9406 },
+                { name: "남산타워", lat: 37.5512, long: 126.9882 },
+                { name: "롯데월드", lat: 37.5110, long: 127.0984 },
+            ]
+
+            // 2. 상세 라우팅 플랜 추가 (커스텀 아이콘, 웨이포인트 팝업, 라인색상 등)
+            var control = L.Routing.control({
+                waypoints: waypoints.map((wp) => L.latLng(wp.lat, wp.long)),
+                plan: L.Routing.plan(
+                    waypoints.map((wp) => L.latLng(wp.lat, wp.long)),
+                    {
+                        createMarker: function (i, wp) {
+                            var marker = L.marker(wp.latLng, { draggable: true });
+
+                            marker.bindPopup(waypoints[i].name);
+                            return marker;
+                        },
+                    }
+                ),
+                addWaypoints: false, // 사용자에 의한 웨이포인트 추가 가능 여부 설정
+                routeWhileDragging: false, // 드래그하는 동안 경로 재계산 여부 설정
+                draggableWaypoints: false, // 웨이포인트를 드래그 가능 여부 설정
+                show: false, // 라우팅 컨트롤 표시 여부 설정
+            }).addTo(map);
+            
+        </script>
+    </body>
+</html>

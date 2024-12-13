@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>주소로 장소 표시하기</title>
+</head>
+<body>
+    <div>
+        <label for="address">주소 입력:</label>
+        <input type="text" id="address" placeholder="주소를 입력하시오." />
+        <button onclick="searchAddress()">주소 검색</button>
+    </div>
+
+    <!-- 지도를 표시할 div 입니다 -->
+    <div id="map" style="width: 600px; height: 600px;"></div>
+
+    <script type="text/javascript" src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=8a32f46f4338be0ffe04605a3d69d28d&libraries=services"></script>
+    <script>
+        var mapContainer = document.getElementById('map'); // 지도를 표시할 div 
+        var mapOption = { 
+            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+            level: 3 // 지도의 확대 레벨
+        };
+
+        // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+        var map = new kakao.maps.Map(mapContainer, mapOption); 
+        var geocoder = new kakao.maps.services.Geocoder();
+
+        function searchAddress() {
+            var address = document.getElementById("address").value;
+            console.log(address);
+
+            geocoder.addressSearch(address, function (result, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                    var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                    var marker = new kakao.maps.Marker({
+                        map: map,
+                        position: coords,
+                    });
+
+                    var infowindow = new kakao.maps.InfoWindow({
+                        content: '<div style="width:150px;text-align:center;padding:6px 0;">입력한 위치</div>',
+                    });
+                    infowindow.open(map, marker);
+
+                    map.setCenter(coords);
+                } else {
+                    alert("주소 검색 실패");
+                }
+            })
+        }
+    </script>
+</body>
+</html>
