@@ -33,3 +33,8 @@ app.delete("/user", (req, res) => {
 app.listen(port, () => {
     console.log(`서버가 http://localhost:${port}에서 실행 중 입니다.`);
 });
+
+const crypto = require("crypto");
+
+const secret = crypto.randomBytes(64).toString("hex");
+console.log("Generated Secret Key:", secret);
