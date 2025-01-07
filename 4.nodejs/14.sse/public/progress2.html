@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>웹소켓 프로그레스</h1>
+    <button id="startButton" onclick="startProgress()">시작</button>
+    <button id="stopButton">중지</button>
+    <div>
+        <progress id="progressBar" max="100" value="0"></progress>
+        <p id="status">시작 버튼을 클릭하시오</p>
+    </div>
+
+    <script>
+        function startProgress() {
+            const eventSource = new EventSource('http://localhost:3000/progress');
+    
+            const progressBar = document.getElementById('progressBar');
+            const status = document.getElementById('status');
+            const startButton = document.getElementById('startButton');
+            const stopButton = document.getElementById('stopButton');
+
+            startButton.disabled = true;
+            
+            eventSource.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                progressBar.value = data.progress;
+                status.textContent = `Progress: ${data.progress}%`;
+    
+                if (data.percent === 100) {
+                    status.textContent = '완료';
+                    eventSource.close();
+                    startButton.disabled = false;
+                }
+            };
+        }
+    </script>
+</body>
+</html>

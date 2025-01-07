@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>SSE(Server Sent Event)</h1>
+    <div id="output"></div>
+
+    <script>
+        // SSE 연결 생성
+        const eventSource = new EventSource('http://localhost:3000/events');
+
+        // 메시지 수신되었으면???
+        eventSource.onmessage = (event) => {
+            const output = document.getElementById('output');
+            const newMessage = document.createElement('p');
+            newMessage.textContent = `서버 메시지: ${event.data}`;
+            output.appendChild(newMessage);
+        };
+        
+        eventSource.onerror = (error) => {
+            console.error('EventSource failed:', error);
+            eventSource.close();
+        };
+    </script>
+</body>
+</html>

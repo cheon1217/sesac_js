@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #news-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .news-item {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .highlight {
+            background-color: yellow;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <h1>라이브 새싹 뉴스</h1>
+    <div id="news-container"></div>
+    <script>
+        const eventSource = new EventSource('/news');
+        const newsContainer = document.getElementById('news-container');
+        let newsList = []; // 뉴스를 담을 배열
+
+        eventSource.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            // newsContainer.innerHTML += data.news + "<hr>";
+
+            // TODO. 가장 최근 5개만 표시하는데, 최신을 위에 표시한다.
+            // 새로운 메세지가 올 때마다, 리스트의 앞에 삽입
+            newsList.unshift(data.news);
+            if (newsList.length > 5) {
+                newsList.pop(); // 리스트의 맨 뒤의 요소 삭제
+            }
+
+            // 리스트에 담긴 내용으로 화면에 렌더링
+            // newsContainer.innerHTML = newsList.map(news => `<div class="news-item">${news}</div>`).join('');
+
+            // TODO. 가장 최근 1개가 업데이트 될 때마다, 노란색 배경으로 하이라이트를 하거나.. 등등
+            newsContainer.innerHTML = newsList.map((news, index) => {
+                return `<div class="news-item ${index === 0 ? 'highlight' : ''}">${news}</div>`;
+            }).join('');
+
+            setTimeout(() => {
+                const highlightItem = document.querySelector('.highlight');
+                if (highlightItem) {
+                    highlightItem.classList.remove('highlight');
+                }
+            }, 2000);
+        }
+
+        eventSource.onerror = (error) => {
+            console.error('EventSource failed:', error);
+            eventSource.close();
+        };
+    </script>
+</body>
+</html>
