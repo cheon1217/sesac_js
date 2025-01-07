@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>웹소켓 프로그레스</h1>
+    <button id="startButton">시작</button>
+    <button id="stopButton">중지</button>
+    <div>
+        <progress id="progressBar" max="100" value="0"></progress>
+        <p id="status">시작 버튼을 클릭하시오</p>
+    </div>
+
+    <script>
+        const socket = new WebSocket('ws://localhost:3000/progress');
+
+        const progressBar = document.getElementById('progressBar');
+        const status = document.getElementById('status');
+        const startButton = document.getElementById('startButton');
+        const stopButton = document.getElementById('stopButton');
+        
+        startButton.addEventListener("click", startProgress);
+        stopButton.addEventListener("click", stopProgress);
+
+        function startProgress() {
+            startButton.disabled = true;
+            stopButton.disabled = false;
+            socket.send("start");
+        }
+
+        function stopProgress() {
+            startButton.disabled = false;
+            stopButton.disabled = true;
+            status.textContent = "잠시 중지됨";
+            socket.send("stop");
+        }
+
+        socket.onmessage = (event) => {
+            // console.log(event.data);
+            const data = JSON.parse(event.data);
+            console.log(data);
+            progressBar.value = data.progress;
+            status.textContent = `진행중: ${data.progress}%`;
+
+            if (data.progress >= 100) {
+                status.textContent = "작업완료!!";
+                startButton.disabled = false;
+                stopButton.disabled = true;
+            } 
+        }
+    </script>
+</body>
+</html>
