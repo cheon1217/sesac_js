@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+    <h1>AJAX 예제</h1>
+    <button id="loadBtn">데이터 불러오기</button>
+    <div id="result"></div>
+
+    <script>
+        $(document).ready(() => {
+            $("#loadBtn").click(() => {
+                $.ajax({
+                    url: "http://localhost:3000/data",
+                    type: "GET",
+                    success: (data) => {
+                        $("#result").html(
+                            `<h2>${data.title}</h2>
+                             <p>${data.content}</p>`
+                        );
+                    },
+                    error: (error) => {
+                        console.log(error.statusText);
+                        $("#result").html(
+                            `<h2>데이터를 불러오는데 실패했습니다.</h2>`
+                        );
+                    }
+                })
+            })
+        })
+    </script>
+</body>
+</html>

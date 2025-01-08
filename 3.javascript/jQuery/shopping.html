@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+    <h1>쇼핑리스트</h1>
+    <ul id="shoppingList">
+        <li>치킨</li>
+        <li>콜라</li>
+        <li>피자</li>
+        <li>케이크</li>
+    </ul>
+    <input text="text" id="newItem" placeholder="새로운 아이템을 추가하세요" />
+    <button id="addItemBtn">항목추가</button>
+
+    <script>
+        // document.addEventListener("DOMContentLoaded", function() {
+        //     const addItemBtn = document.getElementById("addItemBtn");
+        //     addItemBtn.addEventListener("click", function() {
+        //         const newItemInput = document.getElementById("newItem");
+        //         const newItemValue = newItemInput.value;
+
+        //         // 입력값이 비어있지 않은 경우
+        //         if (newItemValue.trim() !== "") {
+        //             // 리스트에 새 아이템 추가
+        //             const shoppingList = document.getElementById("shoppingList");
+        //             const newItemElement = document.createElement("li");
+        //             newItemElement.textContent = newItemValue;
+        //             shoppingList.appendChild(newItemElement);
+
+        //             // 입력컬럼 지우기
+        //             newItemInput.value = "";
+        //         }
+        //     })
+        // })
+
+        // 위 코드 jquery로 변경
+        $(document).ready(function() {
+            $("#addItemBtn").click(function() {
+                const newItemValue = $("#newItem").val();
+
+                if ($.trim(newItemValue) !== "") {
+                    $("#shoppingList").append(`<li>${newItemValue}</li>`);
+                    $("#newItem").val("");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
