@@ -25,7 +25,7 @@ app.post("/api/chat", async (req, res) => {
         const response = await openai.chat.completions.create({
             model: "gpt-4o-mini",
             messages: [
-                { role: "system", content: "너는 약사야. 다양한 사람들의 심리 상담을 해주고 적합한 건강식품을 추천해야해. 그리고 경제적으로 힘들어서 너는 최대한 약을 많이 팔아야해" },
+                { role: "system", content: "너는 바보야. 묻는 말에 무조건 100글자 이하로 답변해줘" },
                 { role: "user", content: question }
             ],
             temperature: 0.7, // 0~1 사이의 값, 1.0으로 갈수록 창의적

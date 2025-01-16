@@ -79,3 +79,4 @@ sendButton.addEventListener("click", sendMessage);
 questionInput.addEventListener("keypress", (e) => {
     if (e.key === 'Enter') sendMessage(); 
 });
+

@@ -18,6 +18,10 @@ function addMessage(content, isUser = true) {
     `;
     chatContainer.appendChild(messageDiv);
     chatContainer.scrollTop = chatContainer.scrollHeight;
+
+    if (!isUser) {
+        readText(content);
+    }
 }
 
 async function sendMessage() {
@@ -48,3 +52,10 @@ sendButton.addEventListener("click", sendMessage);
 questionInput.addEventListener("keypress", (e) => {
     if (e.key === 'Enter') sendMessage(); 
 });
+
+function readText(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'ko-KR';
+    utterance.rate = 3.0; // 속도 조절, 음성 속도를 빠르게 설정
+    speechSynthesis.speak(utterance);
+}
