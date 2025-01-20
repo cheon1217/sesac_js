@@ -17,3 +17,6 @@ package-lock.json
 .env
 
 *.log
+
+# 배포용 생성파일
+dist/
